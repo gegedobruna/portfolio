@@ -22,40 +22,77 @@ const cycleAvatar = () => {
 };
 
 // GitHub API
-const latestCommit = ref<{repo: string, message: string, url: string} | null>(null);
+type LatestCommit = {
+  repo: string;
+  message: string;
+  date: string;
+  url: string;
+};
+
+const latestCommit = ref<LatestCommit | null>(null);
+const commitState = ref<'loading' | 'ready' | 'empty' | 'error'>('loading');
+const commitError = ref<string | null>(null);
+
+const formatCommitDate = (dateString?: string) => {
+  if (!dateString) return 'Unknown date';
+  const parsed = new Date(dateString);
+  return Number.isNaN(parsed.getTime())
+    ? 'Unknown date'
+    : parsed.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+};
 
 const fetchLatestCommit = async () => {
+  commitState.value = 'loading';
+  commitError.value = null;
+  latestCommit.value = null;
+
   try {
-    console.log('Fetching GitHub events...');
-    const response = await fetch('https://api.github.com/users/gegedobruna/events/public');
-    
+    const response = await fetch('https://api.github.com/users/gegedobruna/events');
+
     if (!response.ok) {
-      console.error('GitHub API error:', response.status, response.statusText);
       throw new Error(`API returned ${response.status}`);
     }
-    
+
     const events = await response.json();
-    console.log('GitHub events:', events);
-    
-    // Find the first push event
-    const pushEvent = events.find((event: any) => event.type === 'PushEvent');
-    console.log('Found push event:', pushEvent);
-    
-    if (pushEvent && pushEvent.repo) {
-      const commitMsg = pushEvent.payload?.commits?.[0]?.message || 'Fresh updates pushed';
-      latestCommit.value = {
-        repo: pushEvent.repo.name.split('/')[1], // Get repo name without username
-        message: commitMsg,
-        url: `https://github.com/${pushEvent.repo.name}`
-      };
-      console.log('Latest commit:', latestCommit.value);
-    } else {
-      console.log('No push events found, using fallback');
-      latestCommit.value = { repo: 'portfolio', message: 'Building cool stuff', url: 'https://github.com/gegedobruna' };
+
+    const pushEvent = events.find((event: any) => event?.type === 'PushEvent');
+
+    if (!pushEvent) {
+      commitState.value = 'empty';
+      return;
     }
+
+    const repoFullName = pushEvent?.repo?.name;
+    const headSha = pushEvent?.payload?.head;
+    const fallbackDate = pushEvent?.created_at;
+
+    if (!repoFullName || !headSha) {
+      commitState.value = 'empty';
+      return;
+    }
+
+    const commitResponse = await fetch(`https://api.github.com/repos/${repoFullName}/commits/${headSha}`);
+
+    if (!commitResponse.ok) {
+      throw new Error(`Commit API returned ${commitResponse.status}`);
+    }
+
+    const commitData = await commitResponse.json();
+    const commitMessage = commitData?.commit?.message || 'Latest update';
+    const commitDate = commitData?.commit?.author?.date || fallbackDate;
+    const commitUrl = commitData?.html_url || `https://github.com/${repoFullName}/commit/${headSha}`;
+
+    latestCommit.value = {
+      repo: repoFullName,
+      message: commitMessage,
+      date: commitDate,
+      url: commitUrl
+    };
+    commitState.value = 'ready';
   } catch (error) {
     console.error('Failed to fetch GitHub commits:', error);
-    latestCommit.value = { repo: 'portfolio', message: 'Building cool stuff', url: 'https://github.com/gegedobruna' };
+    commitError.value = 'Unable to load activity';
+    commitState.value = 'error';
   }
 };
 
@@ -206,20 +243,28 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 6: Fresh Code Drop (Spans 1x1) -->
-      <a :href="latestCommit?.url || 'https://github.com/gegedobruna'" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-3 text-accent">
           <GitBranch class="w-5 h-5 mr-2" />
           <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Fresh Code Drop</h3>
         </div>
-        <div v-if="latestCommit">
-          <p class="text-zinc-900 dark:text-white font-medium text-sm mb-1">{{ latestCommit.repo }}</p>
-          <p class="text-zinc-600 dark:text-zinc-400 text-xs line-clamp-2">{{ latestCommit.message }}</p>
+        <div v-if="commitState === 'ready' && latestCommit" class="space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <p class="text-zinc-900 dark:text-white font-medium text-sm truncate">{{ latestCommit.repo }}</p>
+              <p class="text-zinc-600 dark:text-zinc-400 text-xs line-clamp-2">{{ latestCommit.message }}</p>
+            </div>
+            <a :href="latestCommit.url" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-accent hover:opacity-80 whitespace-nowrap">View</a>
+          </div>
+          <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Updated {{ formatCommitDate(latestCommit.date) }}</p>
         </div>
+        <div v-else-if="commitState === 'empty'" class="text-zinc-500 dark:text-zinc-400 text-xs">No recent activity</div>
+        <div v-else-if="commitState === 'error'" class="text-red-500 text-xs">{{ commitError || 'Unable to load activity' }}</div>
         <div v-else class="animate-pulse">
           <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded mb-2"></div>
           <div class="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4"></div>
         </div>
-      </a>
+      </div>
 
       <!-- Box 7: Globe/Countries Visited (Spans 1x1) -->
       <router-link to="/globe" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
