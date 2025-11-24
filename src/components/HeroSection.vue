@@ -4,10 +4,10 @@ import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBran
 
 // Theme Toggle Logic
 const themes = [
-  { name: 'Cyber', color: '0, 255, 157' },
-  { name: 'Sunset', color: '255, 107, 107' },
-  { name: 'Ocean', color: '59, 130, 246' },
-  { name: 'Lavender', color: '167, 139, 250' },
+  { name: 'Cyber', color: '0 255 157' },
+  { name: 'Sunset', color: '255 107 107' },
+  { name: 'Ocean', color: '59 130 246' },
+  { name: 'Lavender', color: '167 139 250' },
 ];
 
 const currentThemeIndex = ref(0);
@@ -109,6 +109,7 @@ onMounted(() => {
     localStorage.setItem('theme', 'dark');
   }
   console.log('Theme initialized:', isDark.value ? 'dark' : 'light');
+  setAccentColor();
   
   // Fetch GitHub data
   fetchLatestCommit();
@@ -116,8 +117,7 @@ onMounted(() => {
 
 const toggleThemeColor = () => {
   currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length;
-  const theme = themes[currentThemeIndex.value];
-  document.documentElement.style.setProperty('--color-accent', theme.color);
+  setAccentColor();
 };
 
 const toggleDarkMode = () => {
@@ -130,6 +130,11 @@ const toggleDarkMode = () => {
     document.documentElement.classList.remove('dark');
     localStorage.setItem('theme', 'light');
   }
+};
+
+const setAccentColor = () => {
+  const theme = themes[currentThemeIndex.value];
+  document.documentElement.style.setProperty('--color-accent', theme.color);
 };
 
 // Now Status Logic
@@ -153,7 +158,7 @@ const getStatusConfig = (mode: StatusMode) => {
       <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
         <div>
           <div class="flex items-center space-x-4 mb-6">
-            <button @click="cycleAvatar" class="w-16 h-16 rounded-full bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
+            <button @click="cycleAvatar" class="w-20 h-20 rounded-xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
               <img :src="`/utils/avatar${currentAvatarIndex + 1}.webp`" alt="Gegë's Avatar" class="w-full h-full object-cover" />
             </button>
             <div>
@@ -169,7 +174,11 @@ const getStatusConfig = (mode: StatusMode) => {
           </p>
         </div>
         <div>
-          <a href="#" class="inline-flex items-center px-6 py-3 bg-accent text-slate-950 font-bold rounded-lg hover:opacity-90 transition-opacity">
+          <a
+            href="#"
+            class="inline-flex items-center px-6 py-3 text-slate-950 font-bold rounded-lg hover:opacity-90 transition-opacity shadow-[0_12px_30px_-10px_rgba(0,0,0,0.35)]"
+            :style="{ backgroundColor: 'rgb(var(--color-accent))', boxShadow: '0 12px 30px -10px rgba(var(--color-accent), 0.5)' }"
+          >
             <Download class="w-5 h-5 mr-2" />
             Download CV
           </a>
@@ -196,7 +205,7 @@ const getStatusConfig = (mode: StatusMode) => {
       <!-- Box 3: Now Status (Spans 1x1) -->
       <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-2 text-zinc-500 dark:text-zinc-400">
-          <Clock class="w-5 h-5 mr-2" />
+          <Clock class="w-5 h-5 mr-2 text-accent" />
           <span class="text-xs font-bold uppercase tracking-wider">Now</span>
         </div>
         <div class="mt-2">
