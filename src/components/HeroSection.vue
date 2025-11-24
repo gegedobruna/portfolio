@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBranch } from 'lucide-vue-next';
 
 // Theme Toggle Logic
@@ -16,6 +16,10 @@ const isDark = ref(true); // Default to dark mode
 // Avatar Cycling
 const currentAvatarIndex = ref(0);
 const totalAvatars = 7;
+const avatarPaths = Array.from(
+  { length: totalAvatars },
+  (_, i) => new URL(`../assets/avatars/avatar${i + 1}.webp`, import.meta.url).href
+);
 
 const cycleAvatar = () => {
   currentAvatarIndex.value = (currentAvatarIndex.value + 1) % totalAvatars;
@@ -164,6 +168,7 @@ onMounted(() => {
   }
   console.log('Theme initialized:', isDark.value ? 'dark' : 'light');
   setAccentColor();
+  currentAvatarIndex.value = Math.floor(Math.random() * totalAvatars);
   
   // Fetch GitHub data
   fetchLatestCommit();
@@ -191,6 +196,15 @@ const setAccentColor = () => {
   document.documentElement.style.setProperty('--color-accent', theme.color);
 };
 
+const globeTexture = new URL('../assets/globe/globe.webp', import.meta.url).href;
+const moviePosters = [
+  new URL('../assets/movies/movie1.webp', import.meta.url).href,
+  new URL('../assets/movies/movie2.webp', import.meta.url).href,
+  new URL('../assets/movies/movie3.webp', import.meta.url).href
+];
+
+const currentAvatarSrc = computed(() => avatarPaths[currentAvatarIndex.value]);
+
 // Now Status Logic
 type StatusMode = 'looking' | 'employed' | 'project';
 const statusMode = ref<StatusMode>('looking'); // Change this manually as requested
@@ -213,7 +227,7 @@ const getStatusConfig = (mode: StatusMode) => {
         <div>
           <div class="flex items-center space-x-4 mb-6">
             <button @click="cycleAvatar" class="w-20 h-20 rounded-xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
-              <img :src="`/utils/avatar${currentAvatarIndex + 1}.webp`" alt="Gegë's Avatar" class="w-full h-full object-cover" />
+              <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
             </button>
             <div>
               <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Gegë Dobruna</h1>
@@ -331,23 +345,137 @@ const getStatusConfig = (mode: StatusMode) => {
 
       <!-- Box 7: Globe/Countries Visited (Spans 1x1) -->
       <router-link to="/globe" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
-        <MapPin class="w-8 h-8 text-accent mb-2 group-hover:animate-bounce" />
-        <h3 class="text-zinc-900 dark:text-white font-bold mb-1">Countries Visited</h3>
-        <div class="flex flex-wrap justify-center gap-2 mt-2">
-          <span class="text-2xl" title="Hungary">🇭🇺</span>
-          <span class="text-2xl" title="Belgium">🇧🇪</span>
-          <span class="text-2xl" title="USA">🇺🇸</span>
-          <span class="text-xs text-zinc-500 mt-1 block w-full">+ more</span>
+        <MapPin class="w-8 h-8 text-accent mb-3 group-hover:animate-bounce" />
+        <h3 class="text-zinc-900 dark:text-white font-bold mb-3">Countries Visited</h3>
+        <div class="globe-wrap" :style="{ '--globe-texture': `url(${globeTexture})` }">
+          <div class="globe"></div>
         </div>
+        <p class="text-xs text-zinc-500 mt-3">Hover to spin the world</p>
       </router-link>
 
       <!-- Box 8: Favorite Movies (Spans 1x1) -->
       <a href="http://letterboxd.com/cowboyblood/" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <Film class="w-8 h-8 text-accent mb-2 group-hover:scale-110 transition-transform" />
-        <h3 class="text-zinc-900 dark:text-white font-bold mb-1">Favorite Movies</h3>
-        <p class="text-zinc-600 dark:text-zinc-400 text-xs">View on Letterboxd</p>
+        <h3 class="text-zinc-900 dark:text-white font-bold mb-3">Favorite Movies</h3>
+        <div class="poster-stack">
+          <img v-for="(poster, idx) in moviePosters" :key="poster" :src="poster" :alt="`Movie poster ${idx + 1}`" class="poster" :class="`poster-${idx}`" />
+        </div>
+        <p class="text-zinc-600 dark:text-zinc-400 text-xs mt-3">Hover to fan out</p>
       </a>
 
     </div>
   </section>
 </template>
+
+<style scoped>
+.globe-wrap {
+  position: relative;
+  width: 120px;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05)),
+    radial-gradient(ellipse at 70% 70%, rgba(0, 0, 0, 0.3), transparent 60%);
+  box-shadow: inset -12px -10px 25px rgba(0, 0, 0, 0.2);
+  perspective: 800px;
+}
+
+.globe {
+  position: absolute;
+  inset: 0;
+  background-image: var(--globe-texture);
+  background-repeat: repeat-x;
+  background-size: 200% auto;
+  animation: globe-glow 6s ease-in-out infinite alternate;
+  transition: transform 0.8s ease, animation-play-state 0.2s ease;
+}
+
+.globe::before,
+.globe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.globe::before {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 55%);
+  mix-blend-mode: screen;
+}
+
+.globe::after {
+  background: radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.35), transparent 60%);
+}
+
+.group:hover .globe,
+.globe-wrap:hover .globe {
+  animation: globe-spin 1.6s linear infinite;
+  transform: rotateY(12deg);
+}
+
+@keyframes globe-spin {
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@keyframes globe-glow {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.08);
+  }
+}
+
+.poster-stack {
+  position: relative;
+  width: 190px;
+  height: 150px;
+}
+
+.poster {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.poster-0 {
+  z-index: 2;
+}
+
+.poster-1 {
+  z-index: 3;
+}
+
+.poster-2 {
+  z-index: 2;
+}
+
+.poster-stack:hover .poster-0,
+.group:hover .poster-stack .poster-0 {
+  transform: translate(calc(-50% - 22px), -48%) rotate(-8deg) scale(1.05);
+}
+
+.poster-stack:hover .poster-1,
+.group:hover .poster-stack .poster-1 {
+  transform: translate(-50%, calc(-50% - 6px)) scale(1.08);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.3);
+}
+
+.poster-stack:hover .poster-2,
+.group:hover .poster-stack .poster-2 {
+  transform: translate(calc(-50% + 22px), -48%) rotate(8deg) scale(1.05);
+}
+</style>
