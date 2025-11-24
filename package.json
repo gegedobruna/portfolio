@@ -18,7 +18,9 @@
     "vue-tsc": "^3.1.5"
   },
   "dependencies": {
+    "cobe": "^0.6.5",
     "lucide-vue-next": "^0.554.0",
-    "vue": "^3.5.25"
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
   }
 }

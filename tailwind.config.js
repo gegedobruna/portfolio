@@ -4,10 +4,11 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Cabinet Grotesk', 'sans-serif'],
       },
       colors: {
         accent: 'rgb(var(--color-accent) / <alpha-value>)',

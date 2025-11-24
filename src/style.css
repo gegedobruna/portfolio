@@ -9,11 +9,11 @@
   }
 
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cabinet Grotesk', sans-serif;
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-zinc-950 text-zinc-400;
+    @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-400 transition-colors duration-300;
   }
 }

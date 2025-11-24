@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import HeroSection from '../components/HeroSection.vue';
+import ProjectsSection from '../components/ProjectsSection.vue';
+import ExperienceSection from '../components/ExperienceSection.vue';
+import ContactSection from '../components/ContactSection.vue';
+</script>
+
+<template>
+  <main class="pt-32">
+    <HeroSection />
+    <ProjectsSection />
+    <ExperienceSection />
+    <ContactSection />
+  </main>
+</template>

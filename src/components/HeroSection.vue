@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { MapPin, Music, Code, Cpu, Palette, Download } from 'lucide-vue-next';
+import { MapPin, Music, Code, Palette, Download, Moon, Sun, Monitor, Clock } from 'lucide-vue-next';
 
 // Theme Toggle Logic
 const themes = [
@@ -11,11 +11,33 @@ const themes = [
 ];
 
 const currentThemeIndex = ref(0);
+const isDark = ref(true);
 
-const toggleTheme = () => {
+const toggleThemeColor = () => {
   currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length;
   const theme = themes[currentThemeIndex.value];
   document.documentElement.style.setProperty('--color-accent', theme.value);
+};
+
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value;
+  if (isDark.value) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+};
+
+// Now Status Logic
+type StatusMode = 'looking' | 'employed' | 'project';
+const statusMode = ref<StatusMode>('looking'); // Change this manually as requested
+
+const getStatusConfig = (mode: StatusMode) => {
+  switch (mode) {
+    case 'looking': return { text: 'Looking for a job', color: 'bg-green-500', glow: 'shadow-[0_0_15px_rgba(34,197,94,0.6)]' };
+    case 'employed': return { text: 'Full-time employed', color: 'bg-red-500', glow: 'shadow-[0_0_15px_rgba(239,68,68,0.6)]' };
+    case 'project': return { text: 'Working on a project', color: 'bg-yellow-500', glow: 'shadow-[0_0_15px_rgba(234,179,8,0.6)]' };
+  }
 };
 
 // Spotify Mock
@@ -64,23 +86,20 @@ const isPlaying = ref(true);
         </ul>
       </div>
 
-      <!-- Box 3: Specialized Niche (Spans 1x1) -->
-      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] relative overflow-hidden">
-        <div class="relative z-10">
-          <div class="flex items-center mb-4 text-accent">
-            <Cpu class="w-6 h-6 mr-2" />
-            <h3 class="font-bold text-white">GPU Computing</h3>
-          </div>
-          <div class="space-y-1 text-zinc-400 font-mono text-sm">
-            <p>cuDF</p>
-            <p>cuML</p>
-            <p>cuGraph</p>
-            <p>R Language</p>
-          </div>
+      <!-- Box 3: Now Status (Spans 1x1) -->
+      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden">
+        <div class="flex items-center mb-2 text-zinc-400">
+          <Clock class="w-5 h-5 mr-2" />
+          <span class="text-xs font-bold uppercase tracking-wider">Now</span>
         </div>
-        <!-- Decorative background element -->
-        <div class="absolute -bottom-4 -right-4 text-zinc-800/50">
-          <Cpu class="w-24 h-24" />
+        <div class="mt-2">
+          <div class="flex items-center space-x-3">
+            <div class="relative">
+              <div :class="['w-3 h-3 rounded-full animate-pulse', getStatusConfig(statusMode).color, getStatusConfig(statusMode).glow]"></div>
+            </div>
+            <p class="text-white font-medium text-sm">{{ getStatusConfig(statusMode).text }}</p>
+          </div>
+          <p class="text-zinc-500 text-xs mt-2 pl-6">Based in Belgium</p>
         </div>
       </div>
 
@@ -103,24 +122,29 @@ const isPlaying = ref(true);
       </div>
 
       <!-- Box 5: Globe/Location (Spans 1x1) -->
-      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center">
-        <MapPin class="w-8 h-8 text-accent mb-2" />
+      <router-link to="/globe" class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group">
+        <MapPin class="w-8 h-8 text-accent mb-2 group-hover:animate-bounce" />
         <h3 class="text-white font-bold mb-1">Countries Visited</h3>
         <div class="flex flex-wrap justify-center gap-2 mt-2">
           <span class="text-2xl" title="Belgium">🇧🇪</span>
           <span class="text-2xl" title="Kosovo">🇽🇰</span>
-          <span class="text-2xl" title="France">🇫🇷</span>
-          <span class="text-2xl" title="Germany">🇩🇪</span>
+          <span class="text-2xl" title="USA">🇺🇸</span>
+          <span class="text-xs text-zinc-500 mt-1 block w-full">+ more</span>
         </div>
-      </div>
+      </router-link>
 
       <!-- Box 6: Theme Toggle (Spans 1x1) -->
-      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center cursor-pointer group" @click="toggleTheme">
-        <div class="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center mb-3 group-hover:bg-zinc-700 transition-colors">
-          <Palette class="w-6 h-6 text-accent" />
+      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4">
+        <div class="flex items-center gap-4">
+           <button @click="toggleThemeColor" class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition-colors" title="Change Color">
+            <Palette class="w-5 h-5 text-accent" />
+          </button>
+          <button @click="toggleDarkMode" class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition-colors" title="Toggle Dark Mode">
+            <Moon v-if="isDark" class="w-5 h-5 text-white" />
+            <Sun v-else class="w-5 h-5 text-yellow-500" />
+          </button>
         </div>
-        <h3 class="text-white font-bold text-sm">Change Theme</h3>
-        <p class="text-zinc-500 text-xs mt-1">{{ themes[currentThemeIndex].name }}</p>
+        <p class="text-zinc-500 text-xs">{{ themes[currentThemeIndex].name }} Mode</p>
       </div>
 
     </div>
