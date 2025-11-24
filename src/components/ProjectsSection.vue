@@ -39,7 +39,7 @@ const projects: Project[] = [
 
 <template>
   <section id="projects" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-white mb-12 flex items-center">
+    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-12 flex items-center">
       <span class="text-accent mr-3">/</span> Projects
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

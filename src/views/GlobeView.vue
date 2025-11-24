@@ -151,15 +151,15 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-950">
-    <router-link to="/" class="absolute top-8 left-8 z-20 flex items-center text-zinc-400 hover:text-white transition-colors bg-zinc-900/50 px-4 py-2 rounded-full backdrop-blur-md border border-zinc-800">
+  <div class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-100 dark:bg-zinc-950 transition-colors duration-300">
+    <router-link to="/" class="absolute top-8 left-8 z-20 flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors bg-white/50 dark:bg-zinc-900/50 px-4 py-2 rounded-full backdrop-blur-md border border-zinc-300 dark:border-zinc-800">
       <ArrowLeft class="w-5 h-5 mr-2" />
       Back to Home
     </router-link>
     
     <div class="z-10 text-center mb-0 absolute top-24 pointer-events-none">
-      <h1 class="text-4xl font-bold text-white mb-2">Global Footprint</h1>
-      <p class="text-zinc-400">Highlighted countries show places I've visited.</p>
+      <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">Global Footprint</h1>
+      <p class="text-zinc-600 dark:text-zinc-400">Highlighted countries show places I've visited.</p>
     </div>
 
     <canvas ref="canvasRef" class="outline-none cursor-move"></canvas>

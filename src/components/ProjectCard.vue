@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-accent hover:shadow-glow transition-all duration-300 group flex flex-col h-full">
+  <div class="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[8px_8px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 group flex flex-col h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
     <div class="h-48 overflow-hidden relative">
       <img :src="project.image" :alt="project.title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
       <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-60"></div>
