@@ -32,6 +32,7 @@ type LatestCommit = {
 const latestCommit = ref<LatestCommit | null>(null);
 const commitState = ref<'loading' | 'ready' | 'empty' | 'error'>('loading');
 const commitError = ref<string | null>(null);
+const commitCacheKey = 'latestCommitCache';
 
 const formatCommitDate = (dateString?: string) => {
   if (!dateString) return 'Unknown date';
@@ -42,23 +43,32 @@ const formatCommitDate = (dateString?: string) => {
 };
 
 const fetchLatestCommit = async () => {
-  commitState.value = 'loading';
+  const cached = getCachedLatestCommit();
+  if (cached && !latestCommit.value) {
+    latestCommit.value = cached;
+    commitState.value = 'ready';
+  } else {
+    commitState.value = latestCommit.value ? 'ready' : 'loading';
+  }
+
   commitError.value = null;
-  latestCommit.value = null;
 
   try {
-    const response = await fetch('https://api.github.com/users/gegedobruna/events');
+    const eventsResponse = await fetch(`https://api.github.com/users/gegedobruna/events?t=${Date.now()}`, {
+      cache: 'no-store'
+    });
 
-    if (!response.ok) {
-      throw new Error(`API returned ${response.status}`);
+    const eventsText = await eventsResponse.text();
+    if (!eventsResponse.ok) {
+      const apiMessage = safeParse(eventsText)?.message;
+      throw new Error(apiMessage || `API returned ${eventsResponse.status}`);
     }
 
-    const events = await response.json();
-
+    const events = safeParse(eventsText) || [];
     const pushEvent = events.find((event: any) => event?.type === 'PushEvent');
 
     if (!pushEvent) {
-      commitState.value = 'empty';
+      commitState.value = latestCommit.value ? 'ready' : 'empty';
       return;
     }
 
@@ -67,32 +77,76 @@ const fetchLatestCommit = async () => {
     const fallbackDate = pushEvent?.created_at;
 
     if (!repoFullName || !headSha) {
-      commitState.value = 'empty';
+      commitState.value = latestCommit.value ? 'ready' : 'empty';
       return;
     }
 
-    const commitResponse = await fetch(`https://api.github.com/repos/${repoFullName}/commits/${headSha}`);
-
-    if (!commitResponse.ok) {
-      throw new Error(`Commit API returned ${commitResponse.status}`);
-    }
-
-    const commitData = await commitResponse.json();
-    const commitMessage = commitData?.commit?.message || 'Latest update';
-    const commitDate = commitData?.commit?.author?.date || fallbackDate;
-    const commitUrl = commitData?.html_url || `https://github.com/${repoFullName}/commit/${headSha}`;
-
-    latestCommit.value = {
+    const fallbackCommit: LatestCommit = {
       repo: repoFullName,
-      message: commitMessage,
-      date: commitDate,
-      url: commitUrl
+      message: 'Latest update',
+      date: fallbackDate || '',
+      url: `https://github.com/${repoFullName}/commit/${headSha}`
     };
-    commitState.value = 'ready';
-  } catch (error) {
+
+    try {
+      const commitResponse = await fetch(`https://api.github.com/repos/${repoFullName}/commits/${headSha}`, {
+        cache: 'no-store'
+      });
+
+      const commitText = await commitResponse.text();
+      if (!commitResponse.ok) {
+        const commitMessage = safeParse(commitText)?.message;
+        throw new Error(commitMessage || `Commit API returned ${commitResponse.status}`);
+      }
+
+      const commitData = safeParse(commitText) || {};
+      const commitMessage = commitData?.commit?.message || fallbackCommit.message;
+      const commitDate = commitData?.commit?.author?.date || fallbackCommit.date;
+      const commitUrl = commitData?.html_url || fallbackCommit.url;
+
+      latestCommit.value = {
+        repo: repoFullName,
+        message: commitMessage,
+        date: commitDate,
+        url: commitUrl
+      };
+      setCachedLatestCommit(latestCommit.value);
+      commitState.value = 'ready';
+    } catch (commitError) {
+      console.warn('Commit fetch failed, showing fallback push info:', commitError);
+      latestCommit.value = fallbackCommit;
+      setCachedLatestCommit(latestCommit.value);
+      commitState.value = 'ready';
+    }
+  } catch (error: any) {
     console.error('Failed to fetch GitHub commits:', error);
-    commitError.value = 'Unable to load activity';
-    commitState.value = 'error';
+    commitError.value = error?.message || 'Unable to load activity';
+    commitState.value = latestCommit.value ? 'ready' : 'error';
+  }
+};
+
+const safeParse = (text: string) => {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+};
+
+const getCachedLatestCommit = (): LatestCommit | null => {
+  try {
+    const stored = localStorage.getItem(commitCacheKey);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+};
+
+const setCachedLatestCommit = (commit: LatestCommit) => {
+  try {
+    localStorage.setItem(commitCacheKey, JSON.stringify(commit));
+  } catch {
+    // ignore cache errors
   }
 };
 
