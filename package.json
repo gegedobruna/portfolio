@@ -18,8 +18,11 @@
     "vue-tsc": "^3.1.5"
   },
   "dependencies": {
+    "@types/three": "^0.181.0",
     "cobe": "^0.6.5",
     "lucide-vue-next": "^0.554.0",
+    "three": "^0.181.2",
+    "three-globe": "^2.45.0",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3"
   }

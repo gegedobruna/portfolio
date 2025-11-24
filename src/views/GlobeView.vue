@@ -1,80 +1,167 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import createGlobe from 'cobe';
+import { onMounted, ref, onBeforeUnmount } from 'vue';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import ThreeGlobe from 'three-globe';
 import { ArrowLeft } from 'lucide-vue-next';
 
 const canvasRef = ref<HTMLCanvasElement>();
+let renderer: THREE.WebGLRenderer;
+let scene: THREE.Scene;
+let camera: THREE.PerspectiveCamera;
+let controls: OrbitControls;
+let globe: any;
 
-onMounted(() => {
-  let phi = 0;
+// Countries visited - matching ISO A3 codes
+const visitedCountries = [
+  'KOS', // Kosovo 
+  'ALB', // Albania
+  'MNE', // Montenegro
+  'MKD', // Macedonia
+  'TUR', // Turkey
+  'HUN', // Hungary
+  'BEL', // Belgium
+  'AUT', // Austria
+  'DEU', // Germany
+  'USA', // United States
+];
 
+// Helper function to check if a country is visited
+function isCountryVisited(properties: any): boolean {
+  const iso3 = properties.ISO_A3;
+  const iso3eh = properties.ISO_A3_EH;
+  
+  // Direct ISO code match
+  if (iso3 && visitedCountries.includes(iso3)) {
+    return true;
+  }
+  if (iso3eh && visitedCountries.includes(iso3eh)) {
+    return true;
+  }
+  
+  // Special check for Kosovo by name only (not by code)
+  const name = properties.NAME?.toLowerCase() || '';
+  const admin = properties.ADMIN?.toLowerCase() || '';
+  if (name === 'kosovo' || admin === 'kosovo') {
+    return true;
+  }
+  
+  return false;
+}
+
+function getAccentColor() {
+  const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+  if (accentRGB) {
+    const [r, g, b] = accentRGB.split(' ').map(Number);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  return 'rgb(52, 211, 153)'; // fallback emerald
+}
+
+onMounted(async () => {
   if (!canvasRef.value) return;
 
-  const globe = createGlobe(canvasRef.value, {
-    devicePixelRatio: 2,
-    width: 1000,
-    height: 1000,
-    phi: 0,
-    theta: 0,
-    dark: 1,
-    diffuse: 1.2,
-    mapSamples: 16000,
-    mapBrightness: 6,
-    baseColor: [0.3, 0.3, 0.3],
-    markerColor: [varToRgb(getComputedStyle(document.documentElement).getPropertyValue('--color-accent'))],
-    glowColor: [0.1, 0.1, 0.1],
-    markers: [
-      { location: [42.6629, 21.1655], size: 0.1 }, // Kosovo
-      { location: [41.3275, 19.8187], size: 0.05 }, // Albania
-      { location: [42.4304, 19.2594], size: 0.05 }, // Montenegro
-      { location: [41.6086, 21.7453], size: 0.05 }, // Macedonia
-      { location: [38.9637, 35.2433], size: 0.05 }, // Turkey
-      { location: [47.1625, 19.5033], size: 0.05 }, // Hungary
-      { location: [50.8503, 4.3517], size: 0.1 }, // Belgium
-      { location: [47.5162, 14.5501], size: 0.05 }, // Austria
-      { location: [51.1657, 10.4515], size: 0.05 }, // Germany
-      { location: [40.7128, -74.0060], size: 0.05 }, // New York
-      { location: [34.0489, -111.0937], size: 0.05 }, // Arizona
-      { location: [38.8026, -116.4194], size: 0.05 }, // Nevada
-      { location: [36.7783, -119.4179], size: 0.05 }, // California
-      { location: [40.6331, -89.3985], size: 0.05 }, // Illinois
-      { location: [34.5199, -105.8701], size: 0.05 }, // New Mexico
-    ],
-    onRender: (state) => {
-      state.phi = phi;
-      phi += 0.005;
-    },
-  });
+  // Scene Setup
+  scene = new THREE.Scene();
+
+  // Camera Setup
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 300;
+
+  // Renderer Setup
+  renderer = new THREE.WebGLRenderer({ canvas: canvasRef.value, antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  // Controls
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.enableZoom = true;
+  controls.minDistance = 150;
+  controls.maxDistance = 500;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.5;
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+  scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+  directionalLight.position.set(5, 3, 5);
+  scene.add(directionalLight);
+
+  // Globe - solid light color instead of texture
+  globe = new ThreeGlobe()
+    .globeMaterial(new THREE.MeshPhongMaterial({ 
+      color: 0xe5e5e5, // light gray
+      shininess: 5,
+    }))
+    .showAtmosphere(true)
+    .atmosphereColor('#34d399')
+    .atmosphereAltitude(0.15);
+
+  // Load country polygons
+  fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson')
+    .then(res => res.json())
+    .then(countries => {
+      const accentColor = getAccentColor();
+      
+      globe
+        .polygonsData(countries.features)
+        .polygonCapColor((d: any) => {
+          return isCountryVisited(d.properties) ? accentColor : 'rgba(200, 200, 200, 0.1)';
+        })
+        .polygonSideColor(() => 'rgba(0, 0, 0, 0.05)')
+        .polygonStrokeColor(() => '#666666') // Dark gray borders for all countries
+        .polygonAltitude((d: any) => {
+          return isCountryVisited(d.properties) ? 0.01 : 0.001;
+        })
+        .polygonsTransitionDuration(300);
+    });
+
+  scene.add(globe);
+
+  // Animation Loop
+  const animate = () => {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  };
+  animate();
+
+  // Resize Handler
+  window.addEventListener('resize', onWindowResize);
 });
 
-function varToRgb(str: string): [number, number, number] {
-  // Simple parser for "R G B" string to [0-1, 0-1, 0-1]
-  const parts = str.trim().split(' ').map(Number);
-  if (parts.length === 3) {
-    return [parts[0]/255, parts[1]/255, parts[2]/255];
+const onWindowResize = () => {
+  if (camera && renderer) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
   }
-  return [0.2, 0.8, 0.6]; // Default fallback
-}
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onWindowResize);
+  if (renderer) {
+    renderer.dispose();
+  }
+});
 </script>
 
 <template>
-  <div class="min-h-screen pt-32 flex flex-col items-center justify-center relative overflow-hidden">
-    <router-link to="/" class="absolute top-32 left-8 z-20 flex items-center text-zinc-400 hover:text-white transition-colors">
-      <ArrowLeft class="w-6 h-6 mr-2" />
+  <div class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-950">
+    <router-link to="/" class="absolute top-8 left-8 z-20 flex items-center text-zinc-400 hover:text-white transition-colors bg-zinc-900/50 px-4 py-2 rounded-full backdrop-blur-md border border-zinc-800">
+      <ArrowLeft class="w-5 h-5 mr-2" />
       Back to Home
     </router-link>
     
-    <div class="z-10 text-center mb-8">
-      <h1 class="text-4xl font-bold text-white mb-4">Global Footprint</h1>
-      <p class="text-zinc-400">Places I've visited and explored.</p>
+    <div class="z-10 text-center mb-0 absolute top-24 pointer-events-none">
+      <h1 class="text-4xl font-bold text-white mb-2">Global Footprint</h1>
+      <p class="text-zinc-400">Highlighted countries show places I've visited.</p>
     </div>
 
-    <div class="w-full max-w-3xl aspect-square relative">
-      <canvas
-        ref="canvasRef"
-        style="width: 100%; height: 100%; contain: layout paint size; opacity: 0; transition: opacity 1s ease;"
-        :style="{ opacity: canvasRef ? 1 : 0 }"
-      />
-    </div>
+    <canvas ref="canvasRef" class="outline-none cursor-move"></canvas>
   </div>
 </template>
