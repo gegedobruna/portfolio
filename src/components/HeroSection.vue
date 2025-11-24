@@ -67,10 +67,10 @@ const isPlaying = ref(true);
     <div class="grid grid-cols-1 md:grid-cols-4 auto-rows-min gap-4">
       
       <!-- Box 1: Hero/Bio (Spans 2x2) -->
-      <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-zinc-900 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[8px_8px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
+      <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
         <div>
           <div class="flex items-center space-x-4 mb-6">
-            <div class="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden border-2 border-accent">
+            <div class="w-16 h-16 rounded-full bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent">
               <!-- Placeholder Avatar -->
               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-full h-full object-cover" />
             </div>
@@ -91,7 +91,7 @@ const isPlaying = ref(true);
       </div>
 
       <!-- Box 2: Tech Stack (Spans 1x1) -->
-      <div class="bg-white dark:bg-zinc-900 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-4 text-accent">
           <Code class="w-6 h-6 mr-2" />
           <h3 class="font-bold text-zinc-900 dark:text-white">Tech Stack</h3>
@@ -105,7 +105,7 @@ const isPlaying = ref(true);
       </div>
 
       <!-- Box 3: Now Status (Spans 1x1) -->
-      <div class="bg-white dark:bg-zinc-900 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-2 text-zinc-500 dark:text-zinc-400">
           <Clock class="w-5 h-5 mr-2" />
           <span class="text-xs font-bold uppercase tracking-wider">Now</span>
@@ -122,13 +122,13 @@ const isPlaying = ref(true);
       </div>
 
       <!-- Box 4: Spotify (Spans 1x1) -->
-      <div class="bg-white dark:bg-zinc-900 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-2 text-green-500">
           <Music class="w-5 h-5 mr-2 animate-pulse" />
           <span class="text-xs font-bold uppercase tracking-wider">Now Playing</span>
         </div>
         <div class="flex items-center space-x-3">
-          <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-md flex-shrink-0 overflow-hidden">
+          <div class="w-12 h-12 bg-zinc-100 dark:bg-neutral-800 rounded-md flex-shrink-0 overflow-hidden">
              <!-- Placeholder Album Art -->
              <div class="w-full h-full bg-zinc-200 dark:bg-zinc-700 animate-pulse"></div>
           </div>
@@ -140,7 +140,7 @@ const isPlaying = ref(true);
       </div>
 
       <!-- Box 5: Globe/Location (Spans 1x1) -->
-      <router-link to="/globe" class="bg-white dark:bg-zinc-900 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+      <router-link to="/globe" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <MapPin class="w-8 h-8 text-accent mb-2 group-hover:animate-bounce" />
         <h3 class="text-zinc-900 dark:text-white font-bold mb-1">Countries Visited</h3>
         <div class="flex flex-wrap justify-center gap-2 mt-2">
@@ -152,12 +152,12 @@ const isPlaying = ref(true);
       </router-link>
 
       <!-- Box 6: Theme Toggle (Spans 1x1) -->
-      <div class="bg-white dark:bg-zinc-900 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center gap-4">
-           <button @click="toggleThemeColor" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Change Color">
+           <button @click="toggleThemeColor" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Change Color">
             <Palette class="w-5 h-5 text-accent" />
           </button>
-          <button @click="toggleDarkMode" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Toggle Dark Mode">
+          <button @click="toggleDarkMode" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Toggle Dark Mode">
             <Moon v-if="isDark" class="w-5 h-5 text-zinc-900 dark:text-white" />
             <Sun v-else class="w-5 h-5 text-yellow-500" />
           </button>

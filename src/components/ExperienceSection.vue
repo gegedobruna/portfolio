@@ -38,15 +38,15 @@ const experiences: ExperienceItem[] = [
       
       <div class="relative pl-8 md:pl-0">
         <!-- Vertical Line -->
-        <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 transform -translate-x-1/2"></div>
+        <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-zinc-200 dark:bg-neutral-800 transform -translate-x-1/2"></div>
 
         <div v-for="(item, index) in experiences" :key="index" class="relative mb-12 md:mb-24 last:mb-0">
           <!-- Timeline Dot -->
           <div class="absolute left-8 md:left-1/2 top-0 w-4 h-4 rounded-full bg-accent border-4 border-zinc-100 dark:border-zinc-950 transform -translate-x-1/2 translate-y-1.5 z-10 shadow-[0_0_10px_rgba(var(--color-accent),0.5)]"></div>
 
           <div :class="['md:w-1/2 relative', index % 2 === 0 ? 'md:pr-12 md:text-right md:ml-0' : 'md:pl-12 md:ml-auto']">
-            <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:shadow-[6px_6px_0px_0px_rgba(var(--color-accent),0.3)] transition-all duration-300 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
-              <span class="inline-block px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-accent text-xs font-bold mb-4 border border-zinc-200 dark:border-zinc-700">
+            <div class="bg-white dark:bg-neutral-800 p-6 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+              <span class="inline-block px-3 py-1 rounded-full bg-zinc-100 dark:bg-neutral-800 text-accent text-xs font-bold mb-4 border border-zinc-200 dark:border-zinc-700">
                 {{ item.period }}
               </span>
               <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-1 group-hover:text-accent transition-colors">{{ item.role }}</h3>

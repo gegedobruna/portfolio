@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-100 dark:bg-zinc-950 transition-colors duration-300">
+  <div class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-100 dark:bg-neutral-900 transition-colors duration-300">
     <router-link to="/" class="absolute top-8 left-8 z-20 flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors bg-white/50 dark:bg-zinc-900/50 px-4 py-2 rounded-full backdrop-blur-md border border-zinc-300 dark:border-zinc-800">
       <ArrowLeft class="w-5 h-5 mr-2" />
       Back to Home
