@@ -379,7 +379,7 @@ const getStatusConfig = (mode: StatusMode) => {
             </div>
             <p class="text-zinc-900 dark:text-white font-medium text-sm">{{ getStatusConfig(statusMode).text }}</p>
           </div>
-          <p class="text-zinc-500 text-xs mt-2 pl-6">Based in Belgium</p>
+          <p class="text-zinc-500 text-xs mt-2 pl-6">Based in Kosovo</p>
         </div>
       </div>
 

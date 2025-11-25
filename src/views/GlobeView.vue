@@ -12,6 +12,12 @@ let camera: THREE.PerspectiveCamera;
 let controls: OrbitControls;
 let globe: any;
 
+const getRendererDimensions = () => {
+  const maxSize = window.innerWidth < 768 ? 340 : 480;
+  const size = Math.min(Math.min(window.innerWidth - 48, window.innerHeight - 220), maxSize);
+  return { width: Math.max(size, 200), height: Math.max(size, 200) };
+};
+
 // Countries visited - matching ISO A3 codes
 const visitedCountries = [
   'KOS', // Kosovo 
@@ -65,12 +71,13 @@ onMounted(async () => {
   scene = new THREE.Scene();
 
   // Camera Setup
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const { width, height } = getRendererDimensions();
+  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   camera.position.z = 300;
 
   // Renderer Setup
   renderer = new THREE.WebGLRenderer({ canvas: canvasRef.value, antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(width, height);
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Controls
@@ -136,9 +143,10 @@ onMounted(async () => {
 
 const onWindowResize = () => {
   if (camera && renderer) {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const { width, height } = getRendererDimensions();
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
   }
 };
 
@@ -157,10 +165,10 @@ onBeforeUnmount(() => {
       Back to Home
     </router-link>
     
-    <div class="z-10 text-center mb-0 absolute top-24 pointer-events-none">
+    <div class="z-10 text-center mb-0 absolute top-[150px] pointer-events-none">
       <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">Global Footprint</h1>
     </div>
 
-    <canvas ref="canvasRef" class="outline-none cursor-move"></canvas>
+    <canvas ref="canvasRef" class="outline-none cursor-move mt-36 md:mt-32"></canvas>
   </div>
 </template>
