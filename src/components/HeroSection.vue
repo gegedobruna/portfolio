@@ -174,6 +174,8 @@ onMounted(() => {
   fetchLatestCommit();
   // Fetch Spotify data
   fetchNowPlaying();
+  // Fetch Last.fm stats
+  fetchLastfmStats();
 });
 
 const toggleThemeColor = () => {
@@ -219,6 +221,14 @@ const spotifyLoading = ref(true);
 const spotifyError = ref<string | null>(null);
 const spotifyNowPlaying = ref<SpotifyNowPlaying | null>(null);
 
+type LastfmStats = {
+  playcount?: number;
+};
+
+const lastfmLoading = ref(true);
+const lastfmError = ref<string | null>(null);
+const lastfmStats = ref<LastfmStats | null>(null);
+
 const fetchNowPlaying = async () => {
   spotifyLoading.value = true;
   spotifyError.value = null;
@@ -239,6 +249,29 @@ const fetchNowPlaying = async () => {
     spotifyError.value = 'Unable to load Spotify';
   } finally {
     spotifyLoading.value = false;
+  }
+};
+
+const fetchLastfmStats = async () => {
+  lastfmLoading.value = true;
+  lastfmError.value = null;
+  try {
+    const response = await fetch('/.netlify/functions/lastfm_stats', {
+      cache: 'no-store'
+    });
+    const text = await response.text();
+    const data = JSON.parse(text || '{}');
+
+    if (!response.ok) {
+      throw new Error(data?.error || `Last.fm API returned ${response.status}`);
+    }
+
+    lastfmStats.value = { playcount: Number(data?.playcount || 0) };
+  } catch (err: any) {
+    console.error('Failed to fetch Last.fm stats:', err);
+    lastfmError.value = 'Unable to load Last.fm';
+  } finally {
+    lastfmLoading.value = false;
   }
 };
 
@@ -358,6 +391,18 @@ const getStatusConfig = (mode: StatusMode) => {
           </div>
         </a>
         <div v-else class="text-xs text-zinc-500 dark:text-zinc-400">Not playing anything</div>
+
+        <div class="mt-4 pt-4 border-t border-dashed border-zinc-200 dark:border-zinc-700">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Total Songs Listened To</p>
+          <div class="mt-2 min-h-[28px]">
+            <div v-if="lastfmLoading" class="h-7 w-24 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse"></div>
+            <div v-else-if="lastfmError" class="text-xs text-red-500">{{ lastfmError }}</div>
+            <p v-else class="text-zinc-900 dark:text-white text-2xl font-bold leading-none">
+              {{ (lastfmStats?.playcount ?? 0).toLocaleString() }}
+            </p>
+          </div>
+          <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Since April 21 2021</p>
+        </div>
       </div>
 
       <!-- Box 5: Theme Toggle (Spans 1x1) -->
