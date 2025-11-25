@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBranch } from 'lucide-vue-next';
+import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBranch, Server, Database, Cloud, Terminal, Cpu } from 'lucide-vue-next';
 
 // Theme Toggle Logic
 const themes = [
@@ -209,6 +209,15 @@ const moviePosters = [
 
 const currentAvatarSrc = computed(() => avatarPaths[currentAvatarIndex.value]);
 
+const techDecorIcons = [
+  { component: Server, classes: 'top-3 right-4 rotate-6' },
+  { component: Database, classes: 'bottom-12 right-14 -rotate-6' },
+  { component: Cloud, classes: 'top-16 left-6' },
+  { component: Terminal, classes: 'bottom-4 left-10 rotate-12' },
+  { component: GitBranch, classes: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12' },
+  { component: Cpu, classes: 'top-8 left-1/2 -translate-x-1/2 rotate-3' }
+];
+
 // Spotify Now Playing
 type SpotifyNowPlaying = {
   playing: boolean;
@@ -289,7 +298,7 @@ const getStatusConfig = (mode: StatusMode) => {
 </script>
 
 <template>
-  <section id="about" class="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="about" class="pt-12 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 auto-rows-min gap-4">
       
       <!-- Box 1: Hero/Bio (Spans 2x2) -->
@@ -325,20 +334,36 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 2: Tech Stack (Spans 1x2) -->
-      <div class="md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
-        <div class="flex items-center mb-4 text-accent">
+      <div class="md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none select-none">
+          <component
+            v-for="(icon, idx) in techDecorIcons"
+            :key="idx"
+            :is="icon.component"
+            class="w-16 h-16 text-zinc-400 dark:text-zinc-500 opacity-20 blur-[0.3px] absolute"
+            :class="icon.classes"
+            aria-hidden="true"
+          />
+        </div>
+        <div class="flex items-center mb-4 text-accent relative">
           <Code class="w-6 h-6 mr-2" />
           <h3 class="font-bold text-zinc-900 dark:text-white">Tech Stack</h3>
         </div>
-        <ul class="space-y-2 text-zinc-600 dark:text-zinc-400 text-sm">
+        <ul class="space-y-2 text-zinc-600 dark:text-zinc-400 text-sm relative">
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Java</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Vue 3 / TypeScript</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Python</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>PHP / SQL / T-SQL</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>REST APIs / Express</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>SQL / Postgres</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>PyTorch / TensorFlow</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Pandas / NumPy</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Tailwind CSS</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Git Version Control</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Serverless Functions / Netlify</li>
         </ul>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-4 leading-relaxed relative">
+          I ship fast, API-first builds with Vue + TypeScript, lean backends, and data-heavy workflows—versioned and deployed through Git-driven pipelines.
+        </p>
       </div>
 
       <!-- Box 3: Now Status (Spans 1x1) -->

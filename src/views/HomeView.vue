@@ -6,7 +6,7 @@ import ContactSection from '../components/ContactSection.vue';
 </script>
 
 <template>
-  <main class="pt-32">
+  <main class="pt-16">
     <HeroSection />
     <ProjectsSection />
     <ExperienceSection />

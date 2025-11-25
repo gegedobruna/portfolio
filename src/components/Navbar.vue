@@ -18,7 +18,7 @@ const scrollToSection = (href: string) => {
 
 <template>
   <div class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-    <nav class="pointer-events-auto bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-full px-6 py-3 shadow-lg shadow-zinc-200/50 dark:shadow-black/20 transition-colors duration-300">
+    <nav class="pointer-events-auto bg-white dark:bg-neutral-800 border-2 border-zinc-300 dark:border-zinc-700 rounded-full px-6 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.12)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.35)] transition-colors duration-300">
       <div class="flex items-center space-x-1 md:space-x-6">
         <div class="flex-shrink-0 mr-4 md:mr-0">
           <a href="#" class="text-lg font-bold text-zinc-900 dark:text-white tracking-tight hover:text-accent transition-colors">
