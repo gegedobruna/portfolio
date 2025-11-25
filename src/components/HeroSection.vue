@@ -225,14 +225,14 @@ const getStatusConfig = (mode: StatusMode) => {
       <!-- Box 1: Hero/Bio (Spans 2x2) -->
       <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
         <div>
-          <div class="flex items-center space-x-4 mb-6">
-            <button @click="cycleAvatar" class="w-20 h-20 rounded-xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
-              <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
-            </button>
-            <div>
+          <div class="flex items-center justify-between gap-4 mb-6">
+            <div class="text-left">
               <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Gegë Dobruna</h1>
               <p class="text-zinc-600 dark:text-zinc-400 text-sm">Full-Stack & Data Science</p>
             </div>
+            <button @click="cycleAvatar" class="w-[8rem] h-[8rem] rounded-2xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
+              <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
+            </button>
           </div>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
             I'm Gegë - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
