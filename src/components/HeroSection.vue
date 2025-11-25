@@ -242,7 +242,7 @@ const fetchNowPlaying = async () => {
   spotifyLoading.value = true;
   spotifyError.value = null;
   try {
-    const response = await fetch('/.netlify/functions/now_playing', {
+    const response = await fetch('/api/now-playing', {
       cache: 'no-store'
     });
     const text = await response.text();
@@ -265,7 +265,7 @@ const fetchLastfmStats = async () => {
   lastfmLoading.value = true;
   lastfmError.value = null;
   try {
-    const response = await fetch('/.netlify/functions/lastfm_stats', {
+    const response = await fetch('/api/lastfm-stats', {
       cache: 'no-store'
     });
     const text = await response.text();

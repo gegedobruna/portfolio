@@ -45,7 +45,7 @@ const projects: Project[] = [
   },
   {
     title: "Java Chess Puzzle",
-    logo: new URL('../assets/logos/chess_puzzle_logo.svg', import.meta.url).href,
+    logo: new URL('../assets/logos/chess_puzzle_logo.webp', import.meta.url).href,
     tech: ["Java", "JavaFX", "Jackson JSON", "TinyLog"],
     description: "A Java-based chess-puzzle engine featuring move validation, piece logic, board rendering, and puzzle-solving mechanics. Built with clean object-oriented design patterns as part of coursework.",
     buttons: [
