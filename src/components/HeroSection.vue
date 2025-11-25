@@ -280,7 +280,8 @@ const getStatusConfig = (mode: StatusMode) => {
         </div>
         <div>
           <a
-            href="#"
+            href="/GegeDobrunaCV.pdf"
+            download="GegeDobrunaCV.pdf"
             class="inline-flex items-center px-6 py-3 text-slate-950 font-bold rounded-lg hover:opacity-90 transition-opacity shadow-[0_12px_30px_-10px_rgba(0,0,0,0.35)]"
             :style="{ backgroundColor: 'rgb(var(--color-accent))', boxShadow: '0 12px 30px -10px rgba(var(--color-accent), 0.5)' }"
           >
