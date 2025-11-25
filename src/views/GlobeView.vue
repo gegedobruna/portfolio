@@ -159,7 +159,6 @@ onBeforeUnmount(() => {
     
     <div class="z-10 text-center mb-0 absolute top-24 pointer-events-none">
       <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">Global Footprint</h1>
-      <p class="text-zinc-600 dark:text-zinc-400">Highlighted countries show places I've visited.</p>
     </div>
 
     <canvas ref="canvasRef" class="outline-none cursor-move"></canvas>

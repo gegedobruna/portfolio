@@ -306,21 +306,21 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 5: Theme Toggle (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
         <div class="flex items-center gap-4">
-           <button @click="toggleThemeColor" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Change Color">
-            <Palette class="w-5 h-5 text-accent" />
+           <button @click="toggleThemeColor" class="w-14 h-14 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Change Color">
+            <Palette class="w-11 h-11 text-accent" />
           </button>
-          <button @click="toggleDarkMode" class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Toggle Dark Mode">
-            <Moon v-if="isDark" class="w-5 h-5 text-zinc-900 dark:text-white" />
-            <Sun v-else class="w-5 h-5 text-yellow-500" />
+          <button @click="toggleDarkMode" class="w-14 h-14 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Toggle Dark Mode">
+            <Moon v-if="isDark" class="w-11 h-11 text-zinc-900 dark:text-white" />
+            <Sun v-else class="w-11 h-11 text-yellow-500" />
           </button>
         </div>
         <p class="text-zinc-500 text-xs">{{ themes[currentThemeIndex].name }} Mode</p>
       </div>
 
       <!-- Box 6: Fresh Code Drop (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
         <div class="flex items-center mb-3 text-accent">
           <GitBranch class="w-5 h-5 mr-2" />
           <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Fresh Code Drop</h3>
@@ -344,23 +344,24 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 7: Globe/Countries Visited (Spans 1x1) -->
-      <router-link to="/globe" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
-        <MapPin class="w-8 h-8 text-accent mb-3 group-hover:animate-bounce" />
-        <h3 class="text-zinc-900 dark:text-white font-bold mb-3">Countries Visited</h3>
+      <router-link to="/globe" class="globe-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-start text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
+        <div class="globe-title flex items-center gap-2 mb-3">
+          <MapPin class="w-7 h-7 text-accent" />
+          <h3 class="text-zinc-900 dark:text-white font-bold">Global Footprint</h3>
+          
+        </div>
         <div class="globe-wrap" :style="{ '--globe-texture': `url(${globeTexture})` }">
           <div class="globe"></div>
         </div>
-        <p class="text-xs text-zinc-500 mt-3">Hover to spin the world</p>
       </router-link>
 
       <!-- Box 8: Favorite Movies (Spans 1x1) -->
-      <a href="http://letterboxd.com/cowboyblood/" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center text-center group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <a href="http://letterboxd.com/cowboyblood/" target="_blank" rel="noopener noreferrer" class="movie-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-start justify-start text-left group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
         <Film class="w-8 h-8 text-accent mb-2 group-hover:scale-110 transition-transform" />
-        <h3 class="text-zinc-900 dark:text-white font-bold mb-3">Favorite Movies</h3>
+        <h3 class="text-zinc-900 dark:text-white font-bold mb-3">My Favorite Movies</h3>
         <div class="poster-stack">
           <img v-for="(poster, idx) in moviePosters" :key="poster" :src="poster" :alt="`Movie poster ${idx + 1}`" class="poster" :class="`poster-${idx}`" />
         </div>
-        <p class="text-zinc-600 dark:text-zinc-400 text-xs mt-3">Hover to fan out</p>
       </a>
 
     </div>
@@ -370,14 +371,17 @@ const getStatusConfig = (mode: StatusMode) => {
 <style scoped>
 .globe-wrap {
   position: relative;
-  width: 120px;
-  aspect-ratio: 1;
+  width: 160px;
+  height: 160px;
   border-radius: 9999px;
   overflow: hidden;
   background: radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05)),
     radial-gradient(ellipse at 70% 70%, rgba(0, 0, 0, 0.3), transparent 60%);
   box-shadow: inset -12px -10px 25px rgba(0, 0, 0, 0.2);
   perspective: 800px;
+  flex-shrink: 0;
+  margin-top: -4px;
+  transition: transform 0.35s ease, margin-top 0.35s ease;
 }
 
 .globe {
@@ -414,6 +418,21 @@ const getStatusConfig = (mode: StatusMode) => {
   transform: rotateY(12deg);
 }
 
+.group:hover .globe-wrap,
+.globe-wrap:hover {
+  transform: scale(1.12) translateY(-12px);
+}
+
+.globe-title {
+  transition: transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.globe-card:hover .globe-title {
+  transform: translateY(-20px);
+}
+
 @keyframes globe-spin {
   from {
     background-position-x: 0%;
@@ -433,49 +452,57 @@ const getStatusConfig = (mode: StatusMode) => {
 }
 
 .poster-stack {
-  position: relative;
-  width: 190px;
-  height: 150px;
+  position: absolute;
+  right: -60px;     
+  bottom: 0px;    
+  width: 140px;    
+  height: 120px;
+  transform: rotate(-30deg);
+  pointer-events: none;    
 }
 
 .poster {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 150px;
+  bottom: 0;
+  left: 0;
+  width: 82px;
+  height: 112px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
-  transform: translate(-50%, -50%) rotate(0deg);
 }
 
-.poster-0 {
-  z-index: 2;
+.poster-0 { transform: translate(0px, 0px) rotate(10deg); z-index: 2; }
+.poster-1 { transform: translate(-10px, -8px) rotate(2deg); z-index: 3; }
+.poster-2 { transform: translate(-20px, -2px) rotate(-6deg);  z-index: 1; }
+
+.movie-card:hover .poster-0 {
+  transform: translate(18px, -6px) rotate(20deg) scale(1.08);
 }
 
-.poster-1 {
-  z-index: 3;
+.movie-card:hover .poster-1 {
+  transform: translate(-18px, -26px) rotate(4deg) scale(1.15);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.32);
 }
 
-.poster-2 {
-  z-index: 2;
+.movie-card:hover .poster-2 {
+  transform: translate(-64px, -6px) rotate(-18deg) scale(1.08);
+}
+.globe-card,
+.movie-card {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  padding-top: 22px;
 }
 
-.poster-stack:hover .poster-0,
-.group:hover .poster-stack .poster-0 {
-  transform: translate(calc(-50% - 22px), -48%) rotate(-8deg) scale(1.05);
+.short-tile {
+  height: 150px;
 }
 
-.poster-stack:hover .poster-1,
-.group:hover .poster-stack .poster-1 {
-  transform: translate(-50%, calc(-50% - 6px)) scale(1.08);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.3);
-}
 
-.poster-stack:hover .poster-2,
-.group:hover .poster-stack .poster-2 {
-  transform: translate(calc(-50% + 22px), -48%) rotate(8deg) scale(1.05);
+.globe-wrap {
+  margin-top: -6px;
 }
 </style>
