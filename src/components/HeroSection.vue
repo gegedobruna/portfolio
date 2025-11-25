@@ -172,6 +172,8 @@ onMounted(() => {
   
   // Fetch GitHub data
   fetchLatestCommit();
+  // Fetch Spotify data
+  fetchNowPlaying();
 });
 
 const toggleThemeColor = () => {
@@ -204,6 +206,41 @@ const moviePosters = [
 ];
 
 const currentAvatarSrc = computed(() => avatarPaths[currentAvatarIndex.value]);
+
+// Spotify Now Playing
+type SpotifyNowPlaying = {
+  playing: boolean;
+  title?: string;
+  artist?: string;
+  albumArt?: string;
+};
+
+const spotifyLoading = ref(true);
+const spotifyError = ref<string | null>(null);
+const spotifyNowPlaying = ref<SpotifyNowPlaying | null>(null);
+
+const fetchNowPlaying = async () => {
+  spotifyLoading.value = true;
+  spotifyError.value = null;
+  try {
+    const response = await fetch('/.netlify/functions/now_playing', {
+      cache: 'no-store'
+    });
+    const text = await response.text();
+    const data = JSON.parse(text || '{}');
+
+    if (!response.ok) {
+      throw new Error(data?.error || `Spotify API returned ${response.status}`);
+    }
+
+    spotifyNowPlaying.value = data;
+  } catch (err: any) {
+    console.error('Failed to fetch Spotify now playing:', err);
+    spotifyError.value = 'Unable to load Spotify';
+  } finally {
+    spotifyLoading.value = false;
+  }
+};
 
 // Now Status Logic
 type StatusMode = 'looking' | 'employed' | 'project';
@@ -290,19 +327,36 @@ const getStatusConfig = (mode: StatusMode) => {
       <!-- Box 4: Spotify (Spans 1x1) -->
       <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
         <div class="flex items-center mb-2 text-green-500">
-          <Music class="w-5 h-5 mr-2 animate-pulse" />
-          <span class="text-xs font-bold uppercase tracking-wider">Now Playing</span>
+          <Music class="w-5 h-5 mr-2" :class="{'animate-pulse': spotifyNowPlaying?.playing}" />
+          <span class="text-xs font-bold uppercase tracking-wider">Now Listening To:</span>
         </div>
-        <div class="flex items-center space-x-3">
-          <div class="w-12 h-12 bg-zinc-100 dark:bg-neutral-800 rounded-md flex-shrink-0 overflow-hidden">
-             <!-- Placeholder Album Art -->
-             <div class="w-full h-full bg-zinc-200 dark:bg-zinc-700 animate-pulse"></div>
+        <div v-if="spotifyLoading" class="flex items-center space-x-3 animate-pulse">
+          <div class="w-12 h-12 bg-zinc-200 dark:bg-zinc-700 rounded-md"></div>
+          <div class="min-w-0 space-y-2">
+            <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-32"></div>
+            <div class="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-24"></div>
+          </div>
+        </div>
+        <div v-else-if="spotifyError" class="text-xs text-red-500">{{ spotifyError }}</div>
+        <a
+          v-else-if="spotifyNowPlaying?.playing"
+          href="https://open.spotify.com/user/315caev7ytarjdwjnsswov6kqtxm?si=e9a1b08f3012424d"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center space-x-4 group/link"
+        >
+          <div class="w-20 h-20 bg-zinc-100 dark:bg-neutral-800 rounded-lg flex-shrink-0 overflow-hidden shadow-sm">
+            <img v-if="spotifyNowPlaying.albumArt" :src="spotifyNowPlaying.albumArt" alt="Album art" class="w-full h-full object-cover" />
+            <div v-else class="w-full h-full bg-zinc-200 dark:bg-zinc-700"></div>
           </div>
           <div class="min-w-0">
-            <p class="text-zinc-900 dark:text-white font-medium text-sm truncate">Coming soon...</p>
-            <p class="text-zinc-500 text-xs truncate">Spotify integration</p>
+            <p class="text-zinc-900 dark:text-white font-semibold text-lg truncate group-hover/link:text-accent transition-colors">
+              {{ spotifyNowPlaying.title || 'Unknown track' }}
+            </p>
+            <p class="text-zinc-500 dark:text-zinc-400 text-base truncate">{{ spotifyNowPlaying.artist || 'Unknown artist' }}</p>
           </div>
-        </div>
+        </a>
+        <div v-else class="text-xs text-zinc-500 dark:text-zinc-400">Not playing anything</div>
       </div>
 
       <!-- Box 5: Theme Toggle (Spans 1x1) -->
