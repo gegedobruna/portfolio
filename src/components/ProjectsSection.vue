@@ -6,17 +6,17 @@ import type { Project } from '../types';
 const projects: Project[] = [
   {
     title: "Portfolio",
-    logo: new URL('../assets/logos/portfolio_logo.svg', import.meta.url).href,
-    tech: ["Vue", "JavaScript", "TypeScript", "Tailwind", "Git", "Netlify", "REST APIs"],
-    description: "A fully custom personal portfolio built with Vue and TypeScript, featuring dynamic sections, dark mode, API integrations, and a streamlined Netlify deployment workflow.",
+    logo: new URL('../assets/screenshots/portfolio_sc.webp', import.meta.url).href,
+    tech: ["Vue", "JavaScript", "TypeScript", "Tailwind", "Git", "Vercel", "REST APIs"],
+    description: "A fully custom personal portfolio built with Vue and TypeScript, featuring dynamic sections, dark mode, API integrations, and a streamlined Vercel deployment workflow.",
     buttons: [
       { label: "Source Code", url: "https://github.com/gegedobruna/portfolio" }
     ]
   },
   {
     title: "Schengo",
-    logo: new URL('../assets/logos/schengo_logo.svg', import.meta.url).href,
-    tech: ["Vue", "TypeScript", "JavaScript", "REST APIs"],
+    logo: new URL('../assets/screenshots/schengo_sc.webp', import.meta.url).href,
+    tech: ["Vue", "TypeScript"],
     description: "A modern calculator and planner for tracking Schengen-area stays while staying compliant with the 90/180-day rule. Built with a clean UI, local data handling, and automatic day-range validation.",
     buttons: [
       { label: "View App", url: "https://gegedobruna.github.io/Schengo" },
@@ -25,7 +25,7 @@ const projects: Project[] = [
   },
   {
     title: "Audiolytics",
-    logo: new URL('../assets/logos/audiolytics_logo.svg', import.meta.url).href,
+    logo: new URL('../assets/screenshots/audiolytics_sc.webp', import.meta.url).href,
     tech: ["Python", "Streamlit", "FastAPI", "NumPy", "Pandas", "Altair", "Machine Learning"],
     description: "An interactive analytics dashboard that transforms a prepared listening-history dataset into deep insights: genre evolution, mood/energy arcs, discovery metrics, device usage, listening streaks, and ML-powered 7-day forecasts with confidence bands. Everything runs fully client-side via Streamlit.",
     buttons: [
@@ -35,8 +35,8 @@ const projects: Project[] = [
   },
   {
     title: "Deckmoor",
-    logo: new URL('../assets/logos/deckmoor-logo.svg', import.meta.url).href,
-    tech: ["Vue", "Firebase", "Scryfall API"],
+    logo: new URL('../assets/screenshots/deckmoor_sc.webp', import.meta.url).href,
+    tech: ["Vue", "Firebase", "Scryfall API", "JavaScript", "FastAPI", "Python"],
     description: "A Commander (EDH) deck-building and playtesting web app for Magic: The Gathering players. Features card search, deck construction, simulations, and persistent cloud storage using Firebase.",
     buttons: [
       { label: "View App", url: "https://gegedobruna.github.io/Deckmoor/" },
@@ -54,7 +54,7 @@ const projects: Project[] = [
   },
   {
     title: "SQL Interest Calculator",
-    logo: new URL('../assets/logos/calculator_logo.svg', import.meta.url).href,
+    logo: new URL('../assets/logos/calculator_logo.webp', import.meta.url).href,
     tech: ["SQL Server", "T-SQL"],
     description: "A set of SQL Server utilities for financial systems, including interest-calculation functions, a table-valued function, and a stored procedure. Developed during an internship at ASEE (Asseco) for a banking environment.",
     buttons: [
