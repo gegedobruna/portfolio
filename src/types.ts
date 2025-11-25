@@ -1,11 +1,12 @@
 export interface Project {
-    id: string;
     title: string;
+    logo: string;
+    tech: string[];
     description: string;
-    techStack: string[];
-    logoUrl?: string;
-    demoLink?: string;
-    repoLink?: string;
+    buttons: {
+        label: string;
+        url: string;
+    }[];
 }
 
 export interface ExperienceItem {
