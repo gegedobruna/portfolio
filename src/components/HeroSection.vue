@@ -473,7 +473,10 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 7: Globe/Countries Visited (Spans 1x1) -->
-      <router-link to="/globe" class="globe-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-start text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
+      <router-link
+        to="/globe"
+        class="globe-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-start text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile"
+      >
         <div class="globe-title flex items-center gap-2 mb-3">
           <MapPin class="w-7 h-7 text-accent" />
           <h3 class="text-zinc-900 dark:text-white font-bold">Global Footprint</h3>
@@ -515,19 +518,21 @@ const getStatusConfig = (mode: StatusMode) => {
 
 .globe {
   position: absolute;
-  inset: 0;
+  inset: -6px;
+  border-radius: 9999px;
   background-image: var(--globe-texture);
   background-repeat: repeat-x;
   background-size: 200% auto;
+  background-position: 0% 50%;
   animation: globe-glow 6s ease-in-out infinite alternate;
-  transition: transform 0.8s ease, animation-play-state 0.2s ease;
+  transition: transform 0.8s ease;
 }
 
 .globe::before,
 .globe::after {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -6px;
   border-radius: 9999px;
   pointer-events: none;
 }
@@ -543,7 +548,9 @@ const getStatusConfig = (mode: StatusMode) => {
 
 .group:hover .globe,
 .globe-wrap:hover .globe {
-  animation: globe-spin 1.6s linear infinite;
+  animation:
+    globe-glow 6s ease-in-out infinite alternate,
+    globe-spin 2s linear infinite;
   transform: rotateY(12deg);
 }
 
@@ -629,7 +636,6 @@ const getStatusConfig = (mode: StatusMode) => {
 .short-tile {
   height: 150px;
 }
-
 
 .globe-wrap {
   margin-top: -6px;
