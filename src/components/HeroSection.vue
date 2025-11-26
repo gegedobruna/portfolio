@@ -383,7 +383,7 @@ const getStatusConfig = (mode: StatusMode) => {
             </div>
             <p class="text-zinc-900 dark:text-white font-medium text-sm">{{ getStatusConfig(statusMode).text }}</p>
           </div>
-          <p class="text-zinc-500 text-xs mt-2 pl-6">Based in Kosovo</p>
+        <p class="text-zinc-700 dark:text-zinc-200 text-xs font-medium mt-2 pl-6">Based in Kosovo</p>
         </div>
       </div>
 
@@ -445,7 +445,7 @@ const getStatusConfig = (mode: StatusMode) => {
             <Sun v-else class="w-11 h-11 text-yellow-500" />
           </button>
         </div>
-        <p class="text-zinc-500 text-xs">{{ themes[currentThemeIndex].name }} Mode</p>
+        <p class="text-zinc-700 dark:text-zinc-200 text-xs font-medium">{{ themes[currentThemeIndex].name }} Mode</p>
       </div>
 
       <!-- Box 6: Fresh Code Drop (Spans 1x1) -->
