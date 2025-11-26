@@ -16,6 +16,9 @@ export interface ExperienceItem {
     period?: string;
     description: string;
     type: 'internship' | 'university' | 'certification' | 'work';
+    highlight?: string;
+    footerNote?: string;
+    footerIcon?: 'check' | 'academic' | 'chart';
 }
 
 export interface Skill {
