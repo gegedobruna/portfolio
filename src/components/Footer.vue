@@ -11,15 +11,15 @@ const currentYear = new Date().getFullYear();
         &copy; {{ currentYear }} Portfolio. All rights reserved.
       </div>
       <div class="flex space-x-6">
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
+        <a href="https://www.github.com/gegedobruna" target="_blank" rel="noopener noreferrer" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
           <Github class="w-5 h-5" />
           <span class="sr-only">GitHub</span>
         </a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
+        <a href="https://www.linkedin.com/in/gegedobruna" target="_blank" rel="noopener noreferrer" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
           <Linkedin class="w-5 h-5" />
           <span class="sr-only">LinkedIn</span>
         </a>
-        <a href="mailto:hello@example.com" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
+        <a href="mailto:gegedobruna@gmail.com" class="text-zinc-400 dark:text-zinc-500 hover:text-accent transition-colors">
           <Mail class="w-5 h-5" />
           <span class="sr-only">Email</span>
         </a>
