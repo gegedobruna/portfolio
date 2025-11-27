@@ -166,7 +166,6 @@ onMounted(() => {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
   }
-  console.log('Theme initialized:', isDark.value ? 'dark' : 'light');
   setAccentColor();
   currentAvatarIndex.value = Math.floor(Math.random() * totalAvatars);
   
@@ -185,7 +184,6 @@ const toggleThemeColor = () => {
 
 const toggleDarkMode = () => {
   isDark.value = !isDark.value;
-  console.log('Toggling to:', isDark.value ? 'dark' : 'light');
   if (isDark.value) {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
@@ -306,15 +304,15 @@ const getStatusConfig = (mode: StatusMode) => {
         <div>
           <div class="flex items-center justify-between gap-4 mb-6">
             <div class="text-left">
-              <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Gegë Dobruna</h1>
+              <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Geg� Dobruna</h1>
               <p class="text-zinc-600 dark:text-zinc-400 text-sm">Full-Stack & Data Science</p>
             </div>
             <button @click="cycleAvatar" class="w-[8rem] h-[8rem] rounded-2xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
-              <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
+              <img :src="currentAvatarSrc" alt="Geg�'s Avatar" class="w-full h-full object-cover" />
             </button>
           </div>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
-            I'm Gegë - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
+            I'm Geg� - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
           </p>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
             I like clean builds, fast feedback loops, and projects that grow with me. Looking for places where I can contribute, learn, and level up - enthusiastic by default.

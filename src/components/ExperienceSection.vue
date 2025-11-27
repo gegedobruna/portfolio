@@ -7,7 +7,7 @@ const experiences: ExperienceItem[] = [
     id: 'asee',
     role: 'Software/Data Engineer Intern',
     company: 'ASEE (Asseco) · Prishtina',
-    period: 'Aug 2025 – Oct 2025',
+    period: 'Aug 2025 ??" Oct 2025',
     description:
       'Developed SQL/T-SQL pipelines, C#/.NET services, and interest-calculation modules for internal financial tools. Optimized data workflows, automated recurring data tasks, and improved financial validation logic used by banking systems.',
     type: 'internship',
@@ -108,3 +108,4 @@ const experiences: ExperienceItem[] = [
     </div>
   </section>
 </template>
+

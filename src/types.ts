@@ -20,8 +20,3 @@ export interface ExperienceItem {
     footerNote?: string;
     footerIcon?: 'check' | 'academic' | 'chart';
 }
-
-export interface Skill {
-    name: string;
-    category?: 'language' | 'framework' | 'tool' | 'niche';
-}
