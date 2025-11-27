@@ -62,7 +62,7 @@ const experiences: ExperienceItem[] = [
             ]"
           >
             <div
-              class="bg-white dark:bg-neutral-800 p-6 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]"
+              class="bg-white dark:bg-neutral-800 p-6 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]"
             >
               <span
                 v-if="item.period"

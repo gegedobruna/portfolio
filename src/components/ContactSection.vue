@@ -11,19 +11,19 @@ import { Github, Linkedin, Mail } from 'lucide-vue-next';
     </p>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <a href="https://www.linkedin.com/in/gegedobruna" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
+      <a href="https://www.linkedin.com/in/gegedobruna" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <Linkedin class="w-8 h-8 text-[#0A66C2] dark:text-[#0A66C2] group-hover:text-accent mb-4 transition-colors" />
         <span class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-accent transition-colors">LinkedIn</span>
         <span class="text-sm text-zinc-500 dark:text-zinc-400 mt-2">Connect professionally</span>
       </a>
       
-      <a href="https://www.github.com/gegedobruna" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
+      <a href="https://www.github.com/gegedobruna" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <Github class="w-8 h-8 text-[#24292e] dark:text-white group-hover:text-accent mb-4 transition-colors" />
         <span class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-accent transition-colors">GitHub</span>
         <span class="text-sm text-zinc-500 dark:text-zinc-400 mt-2">Check out my code</span>
       </a>
       
-      <a href="mailto:gegedobruna@gmail.com" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
+      <a href="mailto:gegedobruna@gmail.com" class="bg-white dark:bg-neutral-800 p-8 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col items-center justify-center text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <Mail class="w-8 h-8 text-emerald-500 dark:text-emerald-400 group-hover:text-accent mb-4 transition-colors" />
         <span class="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-accent transition-colors">Email</span>
         <span class="text-sm text-zinc-500 dark:text-zinc-400 mt-2">Get in touch</span>

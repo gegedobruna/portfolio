@@ -300,19 +300,19 @@ const getStatusConfig = (mode: StatusMode) => {
     <div class="grid grid-cols-1 md:grid-cols-4 auto-rows-min gap-4">
       
       <!-- Box 1: Hero/Bio (Spans 2x2) -->
-      <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))]">
+      <div class="md:col-span-2 md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-8 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 flex flex-col justify-between group shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <div>
           <div class="flex items-center justify-between gap-4 mb-6">
             <div class="text-left">
-              <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Geg� Dobruna</h1>
+              <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Gegë Dobruna</h1>
               <p class="text-zinc-600 dark:text-zinc-400 text-sm">Full-Stack & Data Science</p>
             </div>
             <button @click="cycleAvatar" class="w-[8rem] h-[8rem] rounded-2xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
-              <img :src="currentAvatarSrc" alt="Geg�'s Avatar" class="w-full h-full object-cover" />
+              <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
             </button>
           </div>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
-            I'm Geg� - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
+            I'm Gegë - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
           </p>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
             I like clean builds, fast feedback loops, and projects that grow with me. Looking for places where I can contribute, learn, and level up - enthusiastic by default.
@@ -322,12 +322,7 @@ const getStatusConfig = (mode: StatusMode) => {
           <a
             href="GegeDobrunaCV.pdf"
             download="GegeDobrunaCV.pdf"
-            class="inline-flex items-center px-6 py-3 font-bold rounded-lg hover:opacity-90 transition-opacity border-2"
-            :style="{
-              borderColor: 'rgb(var(--color-accent))',
-              color: 'rgb(var(--color-accent))',
-              backgroundColor: 'transparent'
-            }"
+            class="inline-flex items-center px-6 py-3 font-bold rounded-lg hover:opacity-90 transition-all border-2 border-accent text-accent bg-transparent active:bg-accent/15 active:border-accent/80 active:text-zinc-900 dark:active:text-white active:translate-y-[1px]"
           >
             <Download class="w-5 h-5 mr-2" />
             Download CV
@@ -336,7 +331,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 2: Tech Stack (Spans 1x2) -->
-      <div class="md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] relative overflow-hidden">
+      <div class="md:row-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] relative overflow-hidden">
         <div class="absolute inset-0 pointer-events-none select-none">
           <component
             v-for="(icon, idx) in techDecorIcons"
@@ -369,7 +364,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 3: Now Status (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center relative overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <div class="flex items-center mb-2 text-zinc-500 dark:text-zinc-400">
           <Clock class="w-5 h-5 mr-2 text-accent" />
           <span class="text-xs font-bold uppercase tracking-wider">Now</span>
@@ -386,7 +381,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 4: Spotify (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))]">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
         <div class="flex items-center mb-2 text-green-500">
           <Music class="w-5 h-5 mr-2" :class="{'animate-pulse': spotifyNowPlaying?.playing}" />
           <span class="text-xs font-bold uppercase tracking-wider">Now Listening To:</span>
@@ -433,7 +428,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 5: Theme Toggle (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-center gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] short-tile">
         <div class="flex items-center gap-4">
            <button @click="toggleThemeColor" class="w-14 h-14 rounded-full bg-zinc-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" title="Change Color">
             <Palette class="w-11 h-11 text-accent" />
@@ -447,7 +442,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </div>
 
       <!-- Box 6: Fresh Code Drop (Spans 1x1) -->
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] short-tile">
         <div class="flex items-center mb-3 text-accent">
           <GitBranch class="w-5 h-5 mr-2" />
           <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Fresh Code Drop</h3>
@@ -473,7 +468,7 @@ const getStatusConfig = (mode: StatusMode) => {
       <!-- Box 7: Globe/Countries Visited (Spans 1x1) -->
       <router-link
         to="/globe"
-        class="globe-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-start text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile"
+        class="globe-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-center justify-start text-center cursor-pointer group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] short-tile"
       >
         <div class="globe-title flex items-center gap-2 mb-3">
           <MapPin class="w-7 h-7 text-accent" />
@@ -486,7 +481,7 @@ const getStatusConfig = (mode: StatusMode) => {
       </router-link>
 
       <!-- Box 8: Favorite Movies (Spans 1x1) -->
-      <a href="http://letterboxd.com/cowboyblood/" target="_blank" rel="noopener noreferrer" class="movie-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-start justify-start text-left group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[6px_6px_0px_0px_rgb(var(--color-accent))] short-tile">
+      <a href="http://letterboxd.com/cowboyblood/" target="_blank" rel="noopener noreferrer" class="movie-card bg-white dark:bg-neutral-800 rounded-2xl p-5 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] flex flex-col items-start justify-start text-left group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] short-tile">
         <Film class="w-8 h-8 text-accent mb-2 group-hover:scale-110 transition-transform" />
         <h3 class="text-zinc-900 dark:text-white font-bold mb-3">My Favorite Movies</h3>
         <div class="poster-stack">

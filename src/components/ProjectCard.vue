@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] dark:hover:shadow-[8px_8px_0px_0px_rgb(var(--color-accent))] overflow-hidden">
+  <div class="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 group flex flex-col h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[8px_8px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] overflow-hidden">
     <div class="h-48 bg-zinc-100 dark:bg-neutral-700 overflow-hidden border-b border-zinc-200 dark:border-zinc-700">
       <img
         v-if="project.logo"
@@ -43,12 +43,7 @@ defineProps<{
           :href="button.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-4 py-2 font-semibold rounded-lg text-sm border-2 transition-colors"
-          :style="{
-            borderColor: 'rgb(var(--color-accent))',
-            color: 'rgb(var(--color-accent))',
-            backgroundColor: 'transparent'
-          }"
+          class="inline-flex items-center justify-center px-4 py-2 font-semibold rounded-lg text-sm border-2 transition-colors transition-transform border-accent text-accent bg-transparent active:bg-accent/15 active:border-accent/80 active:text-zinc-900 dark:active:text-white active:translate-y-[1px]"
         >
           {{ button.label }}
         </a>
