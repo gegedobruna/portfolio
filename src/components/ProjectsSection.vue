@@ -24,6 +24,16 @@ const projects: Project[] = [
     ]
   },
   {
+    title: "match.fm",
+    logo: new URL('../assets/screenshots/match_fm_sc.webp', import.meta.url).href,
+    tech: ["Python", "Django", "Celery", "Redis", "Last.fm API", "Requests", "Cosine Similarity", "Render", "Gunicorn", "WhiteNoise"],
+    description: "Compare two Last.fm users and see how closely their listening tastes align. Full-stack Django app on Render with Celery workers and Redis handling async tasks and caching, Requests-driven Last.fm API snapshots with TTL storage and exponential backoff retries, and log-weighted playcount vectors scored via cosine similarity across 3-month, 12-month, and overall windows.",
+    buttons: [
+      { label: "View App", url: "https://match-fm.onrender.com" },
+      { label: "Source Code", url: "https://github.com/gegedobruna/match.fm" }
+    ]
+  },
+  {
     title: "Audiolytics",
     logo: new URL('../assets/screenshots/audiolytics_sc.webp', import.meta.url).href,
     tech: ["Python", "Streamlit", "FastAPI", "NumPy", "Pandas", "Altair", "Machine Learning"],
