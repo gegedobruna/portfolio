@@ -517,8 +517,8 @@ const getStatusConfig = (mode: StatusMode) => {
             <span class="block text-xs text-zinc-500 dark:text-zinc-400 font-normal">1-page concise overview</span>
           </a>
           <a
-            href="GegeDobrunaCV-Europass.pdf"
-            download="GegeDobrunaCV-Europass.pdf"
+            href="GegeDobrunaCV_Europass.pdf"
+            download="GegeDobrunaCV_Europass.pdf"
             class="block w-full border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:bg-accent/5 rounded-xl px-4 py-3 font-semibold text-zinc-900 dark:text-white transition-colors"
             @click="closeCvPicker"
           >
