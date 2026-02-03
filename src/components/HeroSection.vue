@@ -21,6 +21,11 @@ const avatarPaths = Array.from(
   (_, i) => new URL(`../assets/avatars/avatar${i + 1}.webp`, import.meta.url).href
 );
 
+// CV picker modal
+const showCvPicker = ref(false);
+const openCvPicker = () => { showCvPicker.value = true; };
+const closeCvPicker = () => { showCvPicker.value = false; };
+
 const cycleAvatar = () => {
   currentAvatarIndex.value = (currentAvatarIndex.value + 1) % totalAvatars;
 };
@@ -319,14 +324,14 @@ const getStatusConfig = (mode: StatusMode) => {
           </p>
         </div>
         <div>
-          <a
-            href="GegeDobrunaCV.pdf"
-            download="GegeDobrunaCV.pdf"
+          <button
+            type="button"
+            @click="openCvPicker"
             class="inline-flex items-center px-6 py-3 font-bold rounded-lg hover:opacity-90 transition-all border-2 border-accent text-accent bg-transparent active:bg-accent/15 active:border-accent/80 active:text-zinc-900 dark:active:text-white active:translate-y-[1px]"
           >
             <Download class="w-5 h-5 mr-2" />
             Download CV
-          </a>
+          </button>
         </div>
       </div>
 
@@ -488,6 +493,40 @@ const getStatusConfig = (mode: StatusMode) => {
         </div>
       </a>
 
+    </div>
+
+    <!-- CV Picker Modal -->
+    <div
+      v-if="showCvPicker"
+      class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-black/50 backdrop-blur-[2px]"
+      @click.self="closeCvPicker"
+    >
+      <div class="max-w-md w-full bg-white dark:bg-neutral-900 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-2xl p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Choose CV format</h3>
+          <button @click="closeCvPicker" class="text-zinc-500 hover:text-accent text-sm font-semibold">Close</button>
+        </div>
+        <div class="space-y-3">
+          <a
+            href="GegeDobrunaCV.pdf"
+            download="GegeDobrunaCV.pdf"
+            class="block w-full border-2 border-accent/70 text-accent hover:border-accent hover:bg-accent/5 rounded-xl px-4 py-3 font-semibold transition-colors"
+            @click="closeCvPicker"
+          >
+            Standard CV (PDF)
+            <span class="block text-xs text-zinc-500 dark:text-zinc-400 font-normal">1-page concise overview</span>
+          </a>
+          <a
+            href="GegeDobrunaCV-Europass.pdf"
+            download="GegeDobrunaCV-Europass.pdf"
+            class="block w-full border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:bg-accent/5 rounded-xl px-4 py-3 font-semibold text-zinc-900 dark:text-white transition-colors"
+            @click="closeCvPicker"
+          >
+            Europass CV (PDF)
+            <span class="block text-xs text-zinc-500 dark:text-zinc-400 font-normal">EU-friendly standardized format</span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </template>
