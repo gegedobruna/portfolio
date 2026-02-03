@@ -347,16 +347,15 @@ const getStatusConfig = (mode: StatusMode) => {
           <h3 class="font-bold text-zinc-900 dark:text-white">Tech Stack</h3>
         </div>
         <ul class="space-y-2 text-zinc-600 dark:text-zinc-400 text-sm relative">
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Java</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Vue 3 / TypeScript</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Python</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>REST APIs / Express</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>SQL / Postgres</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>PyTorch / TensorFlow</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>SQL / SQL Server</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Pandas / NumPy</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>REST APIs</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Vue 3 / TypeScript</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Tailwind CSS</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>PyTorch / TensorFlow</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Serverless Clouds</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Git Version Control</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Serverless Functions / Netlify</li>
         </ul>
         <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-4 leading-relaxed relative">
           I ship fast, API-first builds with Vue + TypeScript, lean backends, and data-heavy workflows—versioned and deployed through Git-driven pipelines.
