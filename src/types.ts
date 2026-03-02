@@ -19,4 +19,5 @@ export interface ExperienceItem {
     highlight?: string;
     footerNote?: string;
     footerIcon?: 'check' | 'academic' | 'chart';
+    tags?: string[];
 }

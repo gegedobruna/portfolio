@@ -289,12 +289,12 @@ const fetchLastfmStats = async () => {
 
 // Now Status Logic
 type StatusMode = 'looking' | 'employed' | 'project';
-const statusMode = ref<StatusMode>('looking'); // Change this manually as requested
+const statusMode = ref<StatusMode>('employed');
 
 const getStatusConfig = (mode: StatusMode) => {
   switch (mode) {
     case 'looking': return { text: 'Looking for a job', color: 'bg-green-500', glow: 'shadow-[0_0_15px_rgba(34,197,94,0.6)]' };
-    case 'employed': return { text: 'Full-time employed', color: 'bg-red-500', glow: 'shadow-[0_0_15px_rgba(239,68,68,0.6)]' };
+    case 'employed': return { text: 'Full-time employed @ Genpact', color: 'bg-blue-500', glow: 'shadow-[0_0_15px_rgba(239,68,68,0.6)]' };
     case 'project': return { text: 'Working on a project', color: 'bg-yellow-500', glow: 'shadow-[0_0_15px_rgba(234,179,8,0.6)]' };
   }
 };

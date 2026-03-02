@@ -4,6 +4,16 @@ import type { ExperienceItem } from '../types';
 
 const experiences: ExperienceItem[] = [
   {
+    id: 'genpact',
+    role: 'Data Engineering Intern',
+    company: 'Genpact',
+    period: 'Since March 2026',
+    description:
+      'Building and working with the modern data stack to develop strong data engineering fundamentals across the full lifecycle. From data modelling and transformation to pipeline orchestration and end-to-end ETL workflows. Gaining hands-on exposure to major cloud platforms, Data Lakes and Lakehouse architectures, and enterprise tools, through guided project simulations and structured team environments that mirror global delivery standards.',
+    type: 'internship',
+    tags: ['SQL', 'Python', 'Apache Spark', 'ETL Pipelines', 'AWS', 'Azure', 'GCP', 'Databricks', 'Snowflake', 'Data Lakehouse']
+  },
+  {
     id: 'asee',
     role: 'Software/Data Engineer Intern',
     company: 'ASEE (Asseco) · Prishtina',
@@ -101,6 +111,19 @@ const experiences: ExperienceItem[] = [
                 />
                 <span>{{ item.footerNote }}</span>
               </div>
+              <div
+                v-if="item.tags && item.tags.length"
+                class="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-700 flex flex-wrap gap-1.5"
+                :class="{ 'md:justify-end': index % 2 === 0 }"
+              >
+                <span
+                  v-for="tag in item.tags"
+                  :key="tag"
+                  class="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-accent/10 text-accent border border-accent/25"
+                >
+                  {{ tag }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -108,4 +131,3 @@ const experiences: ExperienceItem[] = [
     </div>
   </section>
 </template>
-
