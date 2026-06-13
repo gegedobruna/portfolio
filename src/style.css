@@ -17,3 +17,98 @@
     @apply bg-zinc-100 text-zinc-800 dark:bg-neutral-900 dark:text-zinc-400 transition-colors duration-300;
   }
 }
+
+/* Per-theme personality textures — painted on the page background itself,
+   so cards, the navbar, and menus (all opaque) sit cleanly on top */
+
+/* Terminal Green: soft phosphor bloom from the top + whisper-quiet scanlines */
+html[data-theme='terminal-green'] body {
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -10%, rgb(var(--color-accent) / 0.06), transparent 70%),
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.025) 0 1px, transparent 1px 4px);
+  background-attachment: fixed;
+}
+
+html.dark[data-theme='terminal-green'] body {
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -10%, rgb(var(--color-accent) / 0.08), transparent 70%),
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.09) 0 1px, transparent 1px 4px);
+}
+
+html.dark[data-theme='terminal-green'] :is(h1, h2, h3) {
+  text-shadow: 0 0 12px rgb(var(--color-accent) / 0.3);
+}
+
+/* Pipeline Red: faint diagonal hazard stripes */
+html[data-theme='pipeline-red'] body {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgb(var(--color-accent) / 0.05) 0 14px,
+    transparent 14px 42px
+  );
+  background-attachment: fixed;
+}
+
+/* Warehouse Blue: blueprint engineering grid (fine + coarse lines) */
+html[data-theme='warehouse-blue'] body {
+  background-image:
+    linear-gradient(rgb(var(--color-accent) / 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-accent) / 0.09) 1px, transparent 1px),
+    linear-gradient(rgb(var(--color-accent) / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-accent) / 0.045) 1px, transparent 1px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+  background-attachment: fixed;
+}
+
+/* Cluster Purple: node-graph dot lattice */
+html[data-theme='cluster-purple'] body {
+  background-image: radial-gradient(
+    rgb(var(--color-accent) / 0.14) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 28px 28px;
+  background-attachment: fixed;
+}
+
+/* Global film-grain texture */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.dark .noise-overlay {
+  opacity: 0.05;
+}
+
+/* Vue Router page transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* Honor reduced-motion globally: collapse all animations and transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

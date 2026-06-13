@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBranch, Server, Database, Cloud, Terminal, Cpu } from 'lucide-vue-next';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { MapPin, Music, Code, Palette, Download, Moon, Sun, Clock, Film, GitBranch, Server, Database, Cloud, Terminal, Cpu, Award, BookOpen, Workflow } from 'lucide-vue-next';
+import AnimatedNumber from './AnimatedNumber.vue';
+import { logEvent } from '../composables/telemetry';
 
 // Theme Toggle Logic
 const themes = [
-  { name: 'Cyber', color: '0 255 157' },
-  { name: 'Sunset', color: '255 107 107' },
-  { name: 'Ocean', color: '59 130 246' },
-  { name: 'Lavender', color: '167 139 250' },
+  { name: 'Terminal Green', slug: 'terminal-green', color: '0 255 157' },
+  { name: 'Pipeline Red', slug: 'pipeline-red', color: '255 107 107' },
+  { name: 'Warehouse Blue', slug: 'warehouse-blue', color: '59 130 246' },
+  { name: 'Cluster Purple', slug: 'cluster-purple', color: '167 139 250' },
 ];
 
 const currentThemeIndex = ref(0);
@@ -20,6 +22,58 @@ const avatarPaths = Array.from(
   { length: totalAvatars },
   (_, i) => new URL(`../assets/avatars/avatar${i + 1}.webp`, import.meta.url).href
 );
+
+// Typed subtitle (falls back to static text when reduced motion is preferred)
+const typedRoles = ['Data Engineer', 'Pipeline Builder', 'Spark Developer', 'Cloud Enthusiast'];
+const staticSubtitle = 'Data Engineer • Python • Cloud | Building scalable data pipelines with Spark, Databricks & Cloud';
+const typedText = ref('');
+const reduceMotion = ref(false);
+let typingTimer: number | undefined;
+
+const startTyping = () => {
+  let roleIdx = 0;
+  let charIdx = 0;
+  let deleting = false;
+
+  const tick = () => {
+    const word = typedRoles[roleIdx];
+    if (!deleting) {
+      charIdx++;
+      typedText.value = word.slice(0, charIdx);
+      if (charIdx === word.length) {
+        deleting = true;
+        typingTimer = window.setTimeout(tick, 1800);
+        return;
+      }
+      typingTimer = window.setTimeout(tick, 70);
+    } else {
+      charIdx--;
+      typedText.value = word.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        roleIdx = (roleIdx + 1) % typedRoles.length;
+        typingTimer = window.setTimeout(tick, 350);
+        return;
+      }
+      typingTimer = window.setTimeout(tick, 40);
+    }
+  };
+
+  tick();
+};
+
+const certifications = [
+  { name: 'Databricks Data Engineer Associate', status: 'Certified' },
+  { name: 'NVIDIA Accelerated Data Science', status: 'Certified' },
+  { name: 'AWS Solutions Architect', status: 'In Progress' },
+  { name: 'Claude Certification', status: 'In Progress' },
+];
+
+const learningItems = [
+  { name: 'dbt', progress: 65 },
+  { name: 'Apache Airflow', progress: 45 },
+  { name: 'Data Modeling', progress: 70 },
+];
 
 // CV picker modal
 const showCvPicker = ref(false);
@@ -171,9 +225,18 @@ onMounted(() => {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
   }
+  const savedAccent = Number(localStorage.getItem('accentTheme'));
+  if (savedAccent >= 0 && savedAccent < themes.length) {
+    currentThemeIndex.value = savedAccent;
+  }
   setAccentColor();
   currentAvatarIndex.value = Math.floor(Math.random() * totalAvatars);
-  
+
+  reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion.value) {
+    startTyping();
+  }
+
   // Fetch GitHub data
   fetchLatestCommit();
   // Fetch Spotify data
@@ -182,13 +245,19 @@ onMounted(() => {
   fetchLastfmStats();
 });
 
+onUnmounted(() => {
+  window.clearTimeout(typingTimer);
+});
+
 const toggleThemeColor = () => {
   currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length;
   setAccentColor();
+  logEvent('CONFIG', `cluster repainted: ${themes[currentThemeIndex.value].name}`, 'text-purple-400');
 };
 
 const toggleDarkMode = () => {
   isDark.value = !isDark.value;
+  logEvent('CONFIG', `warehouse lights ${isDark.value ? 'off — dark mode' : 'on — light mode'}`, 'text-yellow-400');
   if (isDark.value) {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
@@ -201,6 +270,9 @@ const toggleDarkMode = () => {
 const setAccentColor = () => {
   const theme = themes[currentThemeIndex.value];
   document.documentElement.style.setProperty('--color-accent', theme.color);
+  // Drives the per-theme textures (scanlines, blueprint grid, …) in style.css
+  document.documentElement.dataset.theme = theme.slug;
+  localStorage.setItem('accentTheme', String(currentThemeIndex.value));
 };
 
 const globeTexture = new URL('../assets/globe/globe.webp', import.meta.url).href;
@@ -287,6 +359,27 @@ const fetchLastfmStats = async () => {
   }
 };
 
+// Live pipeline card: real health of this page's actual data feeds.
+// Extract = the third-party APIs, Transform = the serverless /api routes,
+// Load = the bento cards that render the results.
+const pipelineSources = computed(() => [
+  { name: 'GitHub', ok: commitState.value === 'ready' || commitState.value === 'empty', loading: commitState.value === 'loading' },
+  { name: 'Last.fm', ok: !lastfmError.value, loading: lastfmLoading.value },
+  { name: 'Spotify', ok: !spotifyError.value, loading: spotifyLoading.value },
+]);
+
+const sourcesOnline = computed(() => pipelineSources.value.filter((s) => s.ok && !s.loading).length);
+
+const pipelineStatus = computed(() => {
+  if (pipelineSources.value.some((s) => s.loading)) {
+    return { label: 'Syncing', dot: 'bg-yellow-500', text: 'text-yellow-500', running: true };
+  }
+  if (pipelineSources.value.every((s) => s.ok)) {
+    return { label: 'Running', dot: 'bg-green-500', text: 'text-green-500', running: true };
+  }
+  return { label: 'Degraded', dot: 'bg-red-500', text: 'text-red-500', running: false };
+});
+
 // Now Status Logic
 type StatusMode = 'looking' | 'employed' | 'project';
 const statusMode = ref<StatusMode>('employed');
@@ -294,7 +387,7 @@ const statusMode = ref<StatusMode>('employed');
 const getStatusConfig = (mode: StatusMode) => {
   switch (mode) {
     case 'looking': return { text: 'Looking for a job', color: 'bg-green-500', glow: 'shadow-[0_0_15px_rgba(34,197,94,0.6)]' };
-    case 'employed': return { text: 'Full-time employed @ Genpact', color: 'bg-blue-500', glow: 'shadow-[0_0_15px_rgba(239,68,68,0.6)]' };
+    case 'employed': return { text: 'Interning at Genpact', color: 'bg-blue-500', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.6)]' };
     case 'project': return { text: 'Working on a project', color: 'bg-yellow-500', glow: 'shadow-[0_0_15px_rgba(234,179,8,0.6)]' };
   }
 };
@@ -310,17 +403,22 @@ const getStatusConfig = (mode: StatusMode) => {
           <div class="flex items-center justify-between gap-4 mb-6">
             <div class="text-left">
               <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Gegë Dobruna</h1>
-              <p class="text-zinc-600 dark:text-zinc-400 text-sm">Full-Stack & Data Science</p>
+              <p class="text-zinc-600 dark:text-zinc-400 text-sm min-h-[1.25rem]" :aria-label="staticSubtitle">
+                <template v-if="!reduceMotion">
+                  <span class="text-accent font-semibold">{{ typedText }}</span><span class="typing-cursor text-accent" aria-hidden="true">|</span>
+                </template>
+                <template v-else>{{ staticSubtitle }}</template>
+              </p>
             </div>
-            <button @click="cycleAvatar" class="w-[8rem] h-[8rem] rounded-2xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
+            <button @mouseenter="cycleAvatar" class="w-[8rem] h-[8rem] rounded-2xl bg-zinc-100 dark:bg-neutral-800 overflow-hidden border-2 border-accent cursor-pointer hover:scale-105 transition-transform">
               <img :src="currentAvatarSrc" alt="Gegë's Avatar" class="w-full h-full object-cover" />
             </button>
           </div>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
-            I'm Gegë - a Prishtina-based dev into data science, AI, and full-stack engineering. Recently graduated, currently building and improving things like Deckmoor, Schengo, and Audiolytics - working across interactive UIs, backend logic, GPU-leaning data workflows, and small tools that actually solve problems.
+            I'm Gegë - a Prishtina-based data engineer working with the modern data stack at Genpact: Databricks, Spark, and Delta Live Tables, moving data from cloud storage to clean, queryable tables. I still keep a full-stack side hustle going - this site, Deckmoor, Schengo, and Audiolytics are all mine, UI to backend.
           </p>
           <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
-            I like clean builds, fast feedback loops, and projects that grow with me. Looking for places where I can contribute, learn, and level up - enthusiastic by default.
+            I like clean builds, fast feedback loops, and pipelines that don't page anyone at 3am. Always up for contributing, learning, and leveling up - enthusiastic by default.
           </p>
         </div>
         <div>
@@ -352,19 +450,21 @@ const getStatusConfig = (mode: StatusMode) => {
           <h3 class="font-bold text-zinc-900 dark:text-white">Tech Stack</h3>
         </div>
         <ul class="space-y-2 text-zinc-600 dark:text-zinc-400 text-sm relative">
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Databricks</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Apache Spark</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Delta Live Tables</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Azure</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>AWS</li>
           <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Python</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>SQL / SQL Server</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Pandas / NumPy</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>REST APIs</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Vue 3 / TypeScript</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Tailwind CSS</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>PyTorch / TensorFlow</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Serverless Clouds</li>
-          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>Git Version Control</li>
+          <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-accent mr-2"></span>SQL</li>
         </ul>
         <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-4 leading-relaxed relative">
-          I ship fast, API-first builds with Vue + TypeScript, lean backends, and data-heavy workflows—versioned and deployed through Git-driven pipelines.
+          I build scalable data pipelines on Databricks and Spark—ingesting from cloud storage, transforming with Python and SQL, and landing clean Delta tables ready for analytics.
         </p>
+        <div class="mt-4 pt-3 border-t border-dashed border-zinc-200 dark:border-zinc-700 relative">
+          <p class="text-2xl font-bold text-accent leading-none"><AnimatedNumber :value="3" :duration="1000" /></p>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-1">Cloud Platforms</p>
+        </div>
       </div>
 
       <!-- Box 3: Now Status (Spans 1x1) -->
@@ -424,7 +524,7 @@ const getStatusConfig = (mode: StatusMode) => {
             <div v-if="lastfmLoading" class="h-7 w-24 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse"></div>
             <div v-else-if="lastfmError" class="text-xs text-red-500">{{ lastfmError }}</div>
             <p v-else class="text-zinc-900 dark:text-white text-2xl font-bold leading-none">
-              {{ (lastfmStats?.playcount ?? 0).toLocaleString() }}
+              <AnimatedNumber :value="lastfmStats?.playcount ?? 0" suffix="+" />
             </p>
           </div>
           <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Since April 21 2021</p>
@@ -493,6 +593,105 @@ const getStatusConfig = (mode: StatusMode) => {
         </div>
       </a>
 
+      <!-- Box 9: ETL Pipeline (Spans 2x1) -->
+      <div class="md:col-span-2 bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center text-accent">
+            <Workflow class="w-5 h-5 mr-2" />
+            <h3 class="font-bold text-zinc-900 dark:text-white text-sm">This Page's Data Pipeline</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full animate-pulse" :class="pipelineStatus.dot"></span>
+            <span class="text-[10px] font-bold uppercase tracking-wider" :class="pipelineStatus.text">{{ pipelineStatus.label }}</span>
+          </div>
+        </div>
+        <div class="flex items-stretch gap-1">
+          <div class="pipeline-stage">
+            <Cloud class="w-6 h-6 text-accent mx-auto mb-1.5" />
+            <p class="text-xs font-bold text-zinc-900 dark:text-white">Extract</p>
+            <div class="mt-1 space-y-0.5">
+              <p
+                v-for="source in pipelineSources"
+                :key="source.name"
+                class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight flex items-center justify-center gap-1"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full shrink-0"
+                  :class="source.loading ? 'bg-yellow-500 animate-pulse' : source.ok ? 'bg-green-500' : 'bg-red-500'"
+                ></span>
+                {{ source.name }} API
+              </p>
+            </div>
+          </div>
+          <div class="pipeline-pipe" aria-hidden="true">
+            <span v-for="n in 3" :key="n" class="packet" :class="!reduceMotion && pipelineStatus.running && 'packet-animated'" :style="{ animationDelay: `${(n - 1) * 0.6}s` }"></span>
+          </div>
+          <div class="pipeline-stage">
+            <Cpu class="w-6 h-6 text-accent mx-auto mb-1.5" />
+            <p class="text-xs font-bold text-zinc-900 dark:text-white">Transform</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-1">Serverless /api routes · normalize & cache</p>
+          </div>
+          <div class="pipeline-pipe" aria-hidden="true">
+            <span v-for="n in 3" :key="n" class="packet" :class="!reduceMotion && pipelineStatus.running && 'packet-animated'" :style="{ animationDelay: `${(n - 1) * 0.6 + 0.3}s` }"></span>
+          </div>
+          <div class="pipeline-stage">
+            <Database class="w-6 h-6 text-accent mx-auto mb-1.5" />
+            <p class="text-xs font-bold text-zinc-900 dark:text-white">Load</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-1">Live cards on this page</p>
+          </div>
+        </div>
+        <div class="mt-5 pt-3 border-t border-dashed border-zinc-200 dark:border-zinc-700 flex items-center justify-between gap-4">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Sources Online</span>
+            <p class="font-mono text-sm font-bold tabular-nums" :class="pipelineStatus.text">{{ sourcesOnline }} / {{ pipelineSources.length }}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Records Ingested</span>
+            <p class="font-mono text-sm font-bold text-accent tabular-nums">
+              <AnimatedNumber :value="lastfmStats?.playcount ?? 0" /> <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-normal">scrobbles</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 10: Certifications (Spans 1x1) -->
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-accent/60 hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)] relative overflow-hidden">
+        <div class="flex items-center mb-4 text-accent relative">
+          <Award class="w-5 h-5 mr-2" />
+          <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Certifications</h3>
+        </div>
+        <ul class="space-y-2.5 relative">
+          <li v-for="cert in certifications" :key="cert.name" class="flex items-start justify-between gap-2">
+            <span class="text-xs text-zinc-700 dark:text-zinc-300 leading-snug">{{ cert.name }}</span>
+            <span
+              class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full whitespace-nowrap"
+              :class="cert.status === 'Certified'
+                ? 'bg-green-500/15 text-green-600 dark:text-green-400'
+                : 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400'"
+            >{{ cert.status }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box 11: Currently Learning (Spans 1x1) -->
+      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent dark:hover:border-accent transition-all duration-300 hover:scale-[1.02] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_55%,#000)] dark:hover:shadow-[6px_6px_0px_0px_color-mix(in_srgb,rgb(var(--color-accent))_50%,#000)]">
+        <div class="flex items-center mb-4 text-accent">
+          <BookOpen class="w-5 h-5 mr-2" />
+          <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Currently Learning</h3>
+        </div>
+        <ul class="space-y-3">
+          <li v-for="item in learningItems" :key="item.name">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">{{ item.name }}</span>
+              <span class="text-[10px] text-zinc-500 dark:text-zinc-400 tabular-nums">{{ item.progress }}%</span>
+            </div>
+            <div class="h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+              <div class="h-full rounded-full bg-accent transition-all duration-700" :style="{ width: `${item.progress}%` }"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
     <!-- CV Picker Modal -->
@@ -503,7 +702,10 @@ const getStatusConfig = (mode: StatusMode) => {
     >
       <div class="max-w-md w-full bg-white dark:bg-neutral-900 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-2xl p-6 space-y-4">
         <div class="flex items-center justify-between">
-          <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Choose CV format</h3>
+          <div>
+            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Choose CV format</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Updated June 2026</p>
+          </div>
           <button @click="closeCvPicker" class="text-zinc-500 hover:text-accent text-sm font-semibold">Close</button>
         </div>
         <div class="space-y-3">
@@ -511,7 +713,7 @@ const getStatusConfig = (mode: StatusMode) => {
             href="GegeDobrunaCV.pdf"
             download="GegeDobrunaCV.pdf"
             class="block w-full border-2 border-accent/70 text-accent hover:border-accent hover:bg-accent/5 rounded-xl px-4 py-3 font-semibold transition-colors"
-            @click="closeCvPicker"
+            @click="closeCvPicker(); logEvent('EXPORT', 'CV extracted — standard format', 'text-green-400')"
           >
             Standard CV (PDF)
             <span class="block text-xs text-zinc-500 dark:text-zinc-400 font-normal">1-page concise overview</span>
@@ -520,7 +722,7 @@ const getStatusConfig = (mode: StatusMode) => {
             href="GegeDobrunaCV_Europass.pdf"
             download="GegeDobrunaCV_Europass.pdf"
             class="block w-full border-2 border-zinc-300 dark:border-zinc-700 hover:border-accent hover:bg-accent/5 rounded-xl px-4 py-3 font-semibold text-zinc-900 dark:text-white transition-colors"
-            @click="closeCvPicker"
+            @click="closeCvPicker(); logEvent('EXPORT', 'CV extracted — europass format', 'text-green-400')"
           >
             Europass CV (PDF)
             <span class="block text-xs text-zinc-500 dark:text-zinc-400 font-normal">EU-friendly standardized format</span>
@@ -666,6 +868,59 @@ const getStatusConfig = (mode: StatusMode) => {
 
 .short-tile {
   height: 150px;
+}
+
+.typing-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.pipeline-stage {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px dashed rgb(var(--color-accent) / 0.4);
+  background: rgb(var(--color-accent) / 0.05);
+}
+
+.pipeline-pipe {
+  position: relative;
+  align-self: center;
+  width: 2.5rem;
+  height: 2px;
+  flex-shrink: 0;
+  background: rgb(var(--color-accent) / 0.25);
+  overflow: visible;
+}
+
+.packet {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 9999px;
+  background: rgb(var(--color-accent));
+  box-shadow: 0 0 6px rgb(var(--color-accent) / 0.8);
+  opacity: 0;
+}
+
+.packet-animated {
+  animation: packet-flow 1.8s linear infinite;
+}
+
+@keyframes packet-flow {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateX(2.25rem); opacity: 0; }
 }
 
 .globe-wrap {

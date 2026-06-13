@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import GlobeView from '../views/GlobeView.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -13,7 +12,8 @@ const router = createRouter({
         {
             path: '/globe',
             name: 'globe',
-            component: GlobeView
+            // Lazy-loaded: keeps three.js out of the main bundle
+            component: () => import('../views/GlobeView.vue')
         }
     ],
     scrollBehavior(to) {

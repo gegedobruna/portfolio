@@ -5,7 +5,7 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-  <footer class="bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-white/5 py-8 mt-20 transition-colors duration-300">
+  <footer class="bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-white/5 py-8 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="text-zinc-600 dark:text-zinc-300 text-sm font-medium">
         &copy; {{ currentYear }} Portfolio. All rights reserved.

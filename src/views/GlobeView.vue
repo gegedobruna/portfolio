@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import ThreeGlobe from 'three-globe';
 import { ArrowLeft } from 'lucide-vue-next';
+import AnimatedNumber from '../components/AnimatedNumber.vue';
 
 const canvasRef = ref<HTMLCanvasElement>();
 let renderer: THREE.WebGLRenderer;
@@ -159,7 +160,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main role="main" class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-100 dark:bg-neutral-900 transition-colors duration-300">
+  <main role="main" class="min-h-screen pt-0 flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-300">
     <router-link to="/" class="absolute top-8 left-8 z-20 flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors bg-white/50 dark:bg-zinc-900/50 px-4 py-2 rounded-full backdrop-blur-md border border-zinc-300 dark:border-zinc-800">
       <ArrowLeft class="w-5 h-5 mr-2" />
       Back to Home
@@ -170,5 +171,28 @@ onBeforeUnmount(() => {
     </div>
 
     <canvas ref="canvasRef" class="outline-none cursor-move mt-36 md:mt-32"></canvas>
+
+    <div class="z-10 flex items-center gap-8 mt-6 mb-10 px-6 py-4 rounded-2xl bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-zinc-300 dark:border-zinc-800">
+      <div class="text-center">
+        <p class="text-3xl font-bold text-accent leading-none">
+          <AnimatedNumber :value="visitedCountries.length" :duration="1200" />
+        </p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-1.5">Countries Visited</p>
+      </div>
+      <div class="w-px h-10 bg-zinc-300 dark:bg-zinc-700"></div>
+      <div class="text-center">
+        <p class="text-3xl font-bold text-accent leading-none">
+          <AnimatedNumber :value="2" :duration="1200" />
+        </p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-1.5">Continents</p>
+      </div>
+      <div class="w-px h-10 bg-zinc-300 dark:bg-zinc-700"></div>
+      <div class="text-center">
+        <p class="text-3xl font-bold text-accent leading-none">
+          <AnimatedNumber :value="Math.round((visitedCountries.length / 195) * 100)" :duration="1200" suffix="%" />
+        </p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-1.5">Of the World</p>
+      </div>
+    </div>
   </main>
 </template>
